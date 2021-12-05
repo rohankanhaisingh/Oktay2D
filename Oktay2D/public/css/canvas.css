@@ -1,0 +1,15 @@
+@import "../fonts/index.css";
+
+canvas {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    --color: #3e366d;
+}
+
+img {
+    display: none;
+}

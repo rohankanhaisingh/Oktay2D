@@ -1,0 +1,59 @@
+@font-face {
+    src: url(./HighTide.otf);
+    font-family: HighTide;
+}
+
+@font-face {
+    src: url(./Roboto-Light.ttf);
+    font-family: RobotoLight;
+}
+
+@font-face {
+    src: url(./Montserrat.woff2);
+    font-family: Montserrat;
+}
+
+@font-face {
+    src: url(./PoiretOne.ttf);
+    font-family: PoiretOne;
+}
+
+@font-face {
+    src: url(./fools.otf);
+    font-family: Fools;
+}
+
+@font-face {
+    src: url(./Roboto-Thin.ttf);
+    font-family: RobotoThin;
+}
+
+@font-face {
+    font-family: "Rockout";
+    src: url("./Rockout.ttf");
+}
+
+@font-face {
+    font-family: Chopsic;
+    src: url(./Chopsic-K6Dp.ttf);
+}
+
+@font-face {
+    font-family: EuclidCircularB;
+    src: url(./EuclidCircularB-Regular.otf);
+}
+
+@font-face {
+    font-family: Consolas;
+    src: url(./Consolas.ttf);
+}
+
+@font-face {
+    font-family: Consola;
+    src: url(./CONSOLA.TTF);
+}
+
+@font-face {
+    font-family: CascadiaMono;
+    src: url(./CascadiaMono.TTF);
+}
