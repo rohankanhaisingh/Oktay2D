@@ -38,10 +38,7 @@
     <Content Include="lib\Oktay2D\rendering\text.js" />
     <Content Include="lib\Oktay2D\shapes\rectangle.js" />
     <Content Include="package.json" />
-    <Content Include="public\audio\Ark Patrol - Let Go %28feat. Veronika Redd%29.mp3" />
-    <Content Include="public\audio\Ark Patrol - Let Go %28feat. Veronika Redd%29[Low Frequency].mp3" />
     <Content Include="public\audio\big fart.mp3" />
-    <Content Include="public\audio\Damn Daniel Type Beat.mp3" />
     <Content Include="public\css\canvas.css" />
     <Content Include="public\img\hqdefault.jpg" />
     <Content Include="public\index.html">
