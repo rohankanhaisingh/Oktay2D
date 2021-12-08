@@ -19,6 +19,11 @@ export class CanvasScene {
         this.domElement = domElement;
         this.attributes = [];
 
+        this.mouse = {
+            x: 0,
+            y: 0
+        }
+
         // Create the element.
         const canvas = document.createElement("canvas");
         canvas.className = "oktay2d-scene";
@@ -36,6 +41,17 @@ export class CanvasScene {
         window.addEventListener("resize", () => {
             this.HandleResizeEvent();
         });
+
+        this.HandleEvents();
+    }
+    HandleEvents() {
+
+        this.canvas.addEventListener("mousemove", event => {
+            this.mouse.x = event.offsetX;
+            this.mouse.y = event.offsetY;
+        });
+
+
     }
     HandleResizeEvent() {
 
@@ -219,6 +235,8 @@ export class Renderer {
 
             this.renderObjects.push(renderObject);
 
+            renderObject.appliedRenderContext = this.ctx;
+
             return this;
             
         }
@@ -230,6 +248,9 @@ export class Renderer {
                 const x = renderObject[i];
 
                 if (x instanceof RenderObject) {
+
+                    x.appliedRenderContext = this.ctx;
+
                     this.renderObjects.push(x);
                 } else {
                     throw new Error(`The item in given array with index number '${i}' is not a RenderObject instance.`);
@@ -311,8 +332,10 @@ export class SceneUpdater {
 
 // Export from other files.
 export { Rectangle } from "./shapes/rectangle.js";
+export { Circle } from "./shapes/circle.js";
 export { Color, ColorNode, LinearGradientColorNode } from "./essentials/color.js";
 export { AudioNode } from "./audio/audioNode.js";
 export { TextNode } from "./rendering/text.js";
+export { RenderObject };
 
 export * as Math from "./essentials/math.js";

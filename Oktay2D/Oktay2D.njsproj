@@ -29,6 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="docs\CanvasScene.md" />
+    <Content Include="docs\Renderer.md" />
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
     <Content Include="lib\Oktay2D\essentials\color.js" />
     <Content Include="lib\Oktay2D\essentials\generateUniqueId.js" />
@@ -36,7 +38,9 @@
     <Content Include="lib\Oktay2D\essentials\renderobject.js" />
     <Content Include="lib\Oktay2D\index.js" />
     <Content Include="lib\Oktay2D\rendering\text.js" />
+    <Content Include="lib\Oktay2D\shapes\circle.js" />
     <Content Include="lib\Oktay2D\shapes\rectangle.js" />
+    <Content Include="lib\Oktay2D\todo.txt" />
     <Content Include="package.json" />
     <Content Include="public\audio\big fart.mp3" />
     <Content Include="public\css\canvas.css" />
@@ -137,6 +141,7 @@
     <Folder Include="lib\Oktay2D\essentials\" />
     <Folder Include="lib\Oktay2D\rendering\" />
     <Folder Include="lib\Oktay2D\shapes\" />
+    <Folder Include="docs\" />
     <Folder Include="public\" />
     <Folder Include="public\js\" />
     <Folder Include="public\css\" />

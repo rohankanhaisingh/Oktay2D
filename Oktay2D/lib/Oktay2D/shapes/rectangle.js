@@ -8,8 +8,8 @@ export class Rectangle extends RenderObject {
      * @param {number} y Position on y-axis.
      * @param {number} width Rectangle width.
      * @param {number} height Rectangle height.
-     * @param {object} style Rectangle style.
      * 
+     * @param {object} style Rectangle style
      * @param style.backgroundColor {string | ColorNode}
      * @param style.backgroundImage {Image}
      * @param style.borderColor {string}
@@ -29,6 +29,11 @@ export class Rectangle extends RenderObject {
         this.width = width;
         this.height = height;
 
+        // TODO: Create shape settings method.
+
+        this.rotation = null;
+        this.transformation = null;
+
         this.style = style;
     }
     /**
@@ -39,6 +44,22 @@ export class Rectangle extends RenderObject {
 
         ctx.save();
         ctx.beginPath();
+
+        ctx.translate(this.x, this.y);
+
+        if (typeof this.rotation === "number") ctx.rotate(this.rotation);
+
+        if (this.transformation !== null) {
+
+            ctx.transform(
+                this.transformation.horizontalScaling,
+                this.transformation.verticalSkewing,
+                this.transformation.horizontalSkewing,
+                this.transformation.verticalScaling,
+                this.transformation.horizontalTranslation,
+                this.transformation.verticalTranslation,
+            );
+        }
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
 
@@ -70,13 +91,61 @@ export class Rectangle extends RenderObject {
 
 
         } else {
-            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.rect(0, 0, this.width, this.height);
 
             ctx.fill();
             ctx.stroke();
         }
-
         ctx.restore();
 
+    }
+
+    /**
+     * Sets matrix transform on shape.
+     * @param {number} horizontalScaling Horizontal scaling. A value of '1' results in no scaling.
+     * @param {number} verticalSkewing Vertical skewing.
+     * @param {number} horizontalSkewing Horizontal skewing.
+     * @param {number} verticalScaling Vertical csaling. A value of '1' results in no scaling.
+     * @param {number} horizontalTranslation Horizontal translation.
+     * @param {number} verticalTranslation Vetical translation.
+     */
+    SetTransform(horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation) {
+
+        if (horizontalScaling === null) {
+
+            this.transformation = null;
+
+            return this;
+        }
+
+        this.transformation = {
+            horizontalScaling: horizontalScaling,
+            verticalSkewing: verticalSkewing,
+            horizontalSkewing: horizontalSkewing,
+            verticalScaling: verticalScaling,
+            horizontalTranslation: horizontalTranslation,
+            verticalTranslation: verticalTranslation
+        }
+
+        return this;
+
+    }
+
+    /**
+     * Sets rotation on shape.
+     * @param {number | null} value The rotation angle, clockwise in radians. You can use degree * Math.PI / 180 to calculate a radian from a degree.
+     */
+    SetRotation(value) {
+
+        if (value === null) {
+
+            this.rotation = null;
+
+            return this;
+        }
+
+        if (typeof value !== "number") throw new Error("The given argument (as value) is not a number.");
+
+        this.rotation = value;
     }
 }
