@@ -25,7 +25,7 @@ import * as Oktay2D from "./Oktay2D/index.js";
 ...
 ```
 
-## Quick setup.
+## Quick setup
 
 ```js
 import * as Oktay2D from "./Oktay2D/index.js";
@@ -54,3 +54,22 @@ const MyText = new Oktay2D.TextNode("Yooo! It's a vibe check!", 50, 50, {
 
 
 Renderer.Render(MyText);  
+```
+
+## Additional details
+
+If you want to dive deeper into any subject that is related to this library, there is a documentation for everything in
+https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs. 
+
+All documentations in a tree list:
+
+- [Installation](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/Installation.md)
+- [Setup](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/Setup.md)
+- - - 
+- [CanvasScene](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/CanvasScene.md)
+- [Renderer](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/Renderer.md)
+- [Essentials](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/essentials)
+  - [GenerateUniqueID](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/essentials/GenerateUniqueId.md)
+  - [RenderObject](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/essentials/RenderObject.md)
+- [Shapes](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/shapes)
+  - [Rectangle](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/shapes/Rectangle.md)
