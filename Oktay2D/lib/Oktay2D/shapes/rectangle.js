@@ -12,11 +12,11 @@ export class Rectangle extends RenderObject {
      * @param {object} style Rectangle style
      * @param style.backgroundColor {string | ColorNode}
      * @param style.backgroundImage {Image}
-     * @param style.borderColor {string}
+     * @param style.borderColor {string | ColorNode}
      * @param style.borderWidth {number}
      * @param style.shadowOffsetX {number}
      * @param style.shadowOffsetY {number}
-     * @param style.shadowColor {number}
+     * @param style.shadowColor {string | ColorNode}
      * @param style.shadowBlur {number}
      * @param style.opacity {number}
      */
@@ -105,7 +105,7 @@ export class Rectangle extends RenderObject {
      * @param {number} horizontalScaling Horizontal scaling. A value of '1' results in no scaling.
      * @param {number} verticalSkewing Vertical skewing.
      * @param {number} horizontalSkewing Horizontal skewing.
-     * @param {number} verticalScaling Vertical csaling. A value of '1' results in no scaling.
+     * @param {number} verticalScaling Vertical scaling. A value of '1' results in no scaling.
      * @param {number} horizontalTranslation Horizontal translation.
      * @param {number} verticalTranslation Vetical translation.
      */
@@ -127,25 +127,27 @@ export class Rectangle extends RenderObject {
             verticalTranslation: verticalTranslation
         }
 
-        return this;
+        return this.transformation;
 
     }
 
     /**
      * Sets rotation on shape.
-     * @param {number | null} value The rotation angle, clockwise in radians. You can use degree * Math.PI / 180 to calculate a radian from a degree.
+     * @param {number | null} angle The rotation angle, clockwise in radians. You can use degree * Math.PI / 180 to calculate a radian from a degree.
      */
-    SetRotation(value) {
+    SetRotation(angle) {
 
-        if (value === null) {
+        if (angle === null) {
 
             this.rotation = null;
 
             return this;
         }
 
-        if (typeof value !== "number") throw new Error("The given argument (as value) is not a number.");
+        if (typeof angle !== "number") throw new Error("The given argument (as angle) is not a number.");
 
-        this.rotation = value;
+        this.rotation = angle;
+
+        return this;
     }
 }

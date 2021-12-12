@@ -171,6 +171,21 @@ export class Renderer {
 
         scene.appliedRenderer = this;
     }
+    /** Saving the current canvas rendering state. */
+    SaveState() {
+
+        this.ctx.save();
+
+        return this;
+
+    }
+    /**Restores the last saved canvas rendering state. */
+    RestoreState() {
+
+        this.ctx.restore();
+
+        return this;
+    }
     /**
      * Sets a background color.
      * @param {string} color
@@ -271,6 +286,8 @@ export class SceneUpdater {
      */
     constructor(renderer) {
 
+        if (!(renderer instanceof Renderer)) throw new Error("The given argument (as renderer) is not a Renderer instance.");
+
         this.id = generateUniqueID(18);
 
         this.renderer = renderer;
@@ -338,4 +355,5 @@ export { AudioNode } from "./audio/audioNode.js";
 export { TextNode } from "./rendering/text.js";
 export { RenderObject };
 
+export { generateUniqueID };
 export * as Math from "./essentials/math.js";

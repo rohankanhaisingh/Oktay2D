@@ -30,7 +30,10 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="docs\CanvasScene.md" />
+    <Content Include="docs\essentials\GenerateUniqueId.md" />
+    <Content Include="docs\essentials\RenderObject.md" />
     <Content Include="docs\Renderer.md" />
+    <Content Include="docs\shapes\Rectangle.md" />
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
     <Content Include="lib\Oktay2D\essentials\color.js" />
     <Content Include="lib\Oktay2D\essentials\generateUniqueId.js" />
@@ -135,6 +138,8 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="docs\essentials\" />
+    <Folder Include="docs\shapes\" />
     <Folder Include="lib\" />
     <Folder Include="lib\Oktay2D\" />
     <Folder Include="lib\Oktay2D\audio\" />
