@@ -100,3 +100,26 @@ export function GetDistance(x1, y1, x2, y2) {
         return 0;
     }
 }
+
+/**
+ * Formats a timestamp and returs it as a hh:mm:ss string. 
+ * 
+ * For example: 6969 seconds will be formatted to 1:56:09.
+ * @param {number} time Given time in seconds.
+ */
+export function FormatTimeStamp(time) {
+
+    const hrs = ~~(time / 3600),
+        mins = ~~((time % 3600) / 60),
+        secs = ~~time % 60;
+
+    let ret = "";
+
+
+    if (hrs > 0) ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+
+    return ret;
+}

@@ -6,6 +6,7 @@ class Renderer;
 
 Creating a ``Renderer`` instance will allow you to draw graphics. 
 
+_Last edited: 04-01-2022_
 - - - 
 
 ## Arguments
@@ -83,6 +84,7 @@ Calling this method will return the created ``Renderer`` instance.
 - ``attributes``: Attributes.
 - ``renderObjects``: Array with ``RenderObject`` instances stored.
 - ``ctx``: CanvasRenderingContext2D.
+- ``camera``: Camera instance if one has been applied.
 
 ### Additional details
 

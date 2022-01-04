@@ -6,6 +6,19 @@ export let ObjectCount = 0,
     ObjectMaxLength = 10000000;
 
 export class RenderObject {
+
+    /**@type {number} */
+    x;
+
+    /**@type {number} */
+    y;
+
+    /**@type {number} */
+    width;
+
+    /**@type {number} */
+    height;
+
     constructor() {
 
         this.id = generateUniqueID(18).id;

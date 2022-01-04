@@ -11,6 +11,9 @@ The name 'Oktay2D' has been chosen because a friend of mine his name is Oktay, s
 
 Good story, I know right.
 
+**Note before using: this library (or engine) has been made on Electron. You may have to setup a webserver in order
+to use this.**
+
 - - - 
 
 ## Usage
@@ -65,7 +68,6 @@ All documentations in a tree list:
 
 - [Installation](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/Installation.md)
 - [Setup](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/Setup.md)
-- - - 
 - [CanvasScene](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/CanvasScene.md)
 - [Renderer](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/Renderer.md)
 - [Essentials](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/essentials)
@@ -73,3 +75,22 @@ All documentations in a tree list:
   - [RenderObject](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/essentials/RenderObject.md)
 - [Shapes](https://github.com/babahgee/Oktay2D/tree/master/Oktay2D/docs/shapes)
   - [Rectangle](https://github.com/babahgee/Oktay2D/blob/master/Oktay2D/docs/shapes/Rectangle.md)
+
+- - -
+
+## Electron setup.
+
+This library has been made on an Electron app, not a website in particular. You can use it on a website though, but
+keep in mind that you may have to setup a server to use this. 
+
+I already made an app for Electron which you can use as well. First you gotta install all the modules and frameworks.
+
+```
+npm run install
+```
+
+After you installed all the things, enter this command:
+
+```
+npm start
+```

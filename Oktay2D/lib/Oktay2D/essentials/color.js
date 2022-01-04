@@ -1,3 +1,4 @@
+import { Renderer } from "../index.js";
 import { generateUniqueID } from "./generateUniqueId.js";
 
 function componentToHex(c) {
@@ -49,10 +50,43 @@ export class ColorNode extends Color {
         this.hex = rgbToHex(value);
 
     }
+    /**
+     * Generates a random color.
+     * @param {"rgb" | "rgba" | "hex" | "hsl" | "hsla"} type
+     */
+    static Random(type) {
+
+        switch (type) {
+
+            case "rgb":
+
+                const red = Math.floor(Math.random() * 256),
+                    green = Math.floor(Math.random() * 256),
+                    blue = Math.floor(Math.random() * 256);
+
+                return `rgb(${red}, ${green}, ${blue})`;
+
+                break;
+
+
+            default:
+                throw new Error(`The given argument as (type) is not a recognized color type. Given argument: ${type}`);
+                break;
+        }
+
+    }
 }
 
 export class LinearGradientColorNode {
-    constructor(colorStops) {
+    /**
+     * Creates a linear gradient color node.
+     * @param {Renderer} renderer Renderer to initialize linear gradient on.
+     * @param {any} x1
+     * @param {any} y1
+     * @param {any} x2
+     * @param {any} y2
+     */
+    constructor(renderer, x1, y1, x2, y2) {
 
     }
 }

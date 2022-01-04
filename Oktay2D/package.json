@@ -1,12 +1,12 @@
 {
-  "name": "oktay2-d",
-  "version": "0.0.0",
+  "name": "oktay2d",
+  "version": "0.1.2",
   "description": "Oktay2D",
   "main": "app.js",
   "scripts": {
     "install": "npm install cheerio electron electron-is-dev express express-session socket.io socket.io-client",
     "start": "electron .",
-    "start-no_frame_limit": "electron . --disable-frame-limit"
+    "start-novsync": "electron . --disable-frame-rate-limit"
   },
   "author": {
     "name": "Babah Gee"
@@ -14,6 +14,7 @@
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
+    "ccapture.js": "^1.1.0",
     "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
     "electron": "^16.0.4",

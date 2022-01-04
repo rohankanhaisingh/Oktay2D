@@ -4,7 +4,9 @@
 class Rectangle extends RenderObject;
 ```
 
-Creates a graphical rectangle. 
+A customized rectangle. 
+
+_Last edited: 04-01-2022_
 
 - - - 
 
@@ -29,7 +31,7 @@ Creating a ``Rectangle`` instance requires 5 arguments, ``x``, ``y``, ``width``,
     height: number;
     style: {
         backgroundColor: string | ColorNode;
-        backgroundImage: Image;
+        backgroundImage: Image | HTMLVideoElement;
         borderColor: string | ColorNode;
         borderWidth: number;
         shadowOffsetX: number;
@@ -37,6 +39,7 @@ Creating a ``Rectangle`` instance requires 5 arguments, ``x``, ``y``, ``width``,
         shadowColor: string | ColorNode;
         shadowBlur: number;
         opacity: number;
+        filter: string;
     }
 }
 ```
@@ -101,7 +104,7 @@ Sets a rotation angle on shape. This method requires **one** argument which has 
 ```ts
 style: {
     backgroundColor: string | ColorNode;
-    backgroundImage: Image;
+    backgroundImage: Image | HTMlVideoElement;
     borderColor: string | ColorNode;
     borderWidth: number;
     shadowOffsetX: number;
@@ -109,8 +112,11 @@ style: {
     shadowColor: string | ColorNode;
     shadowBlur: number;
     opacity: number;
+    filter: string;
 }
 ```
+
+**Note: setting filters on multiple render objects will cause your program to perform slow. Same goes to the shadow properties.**
 
 ## Examples
 
@@ -137,8 +143,6 @@ MyRenderer.Render(MyEpicRectangle);
 
 ```js
 import * as Oktay2D from "path_to_lib_here";
-
-// Make sure to have everything ready to draw. If not, read the documentation on how you can setup your environment.
 
 ...
 
@@ -167,8 +171,6 @@ Updater.On("update", function() {
 ```js
 import * as Oktay2D from "path_to_lib_here";
 
-// Make sure to have everything ready to draw. If not, read the documentation on how you can setup your environment.
-
 ...
 
 // Create a rectangle and set a red background color.
@@ -188,8 +190,6 @@ MyRenderer.Render(MyEpicRectangle);
 ```js
 import * as Oktay2D from "path_to_lib_here";
 
-// Make sure to have everything ready to draw. If not, read the documentation on how you can setup your environment.
-
 ...
 
 // Create a rectangle and set a red background color.
@@ -201,6 +201,46 @@ const Degree = 90;
 
 // Rotate the rectangle 90 degrees.
 MyEpicRectangle.SetRotation(Degree * Math.PI / 180);
+
+// Render the rectangle.
+MyRenderer.Render(MyEpicRectangle);
+```
+
+### Example 5: Use an image to render it as a rectangle.
+```html
+<img src="my_image_source" type="image/png" class="my-image"/>
+```
+
+
+```js
+import * as Oktay2D from "path_to_lib_here";
+
+...
+
+const MyEpicRectangle = new Oktay2D.Rectangle(20, 20, 55, 30, {
+    backgroundImage: document.querySelector(".my-image")
+});
+
+// Render the rectangle.
+MyRenderer.Render(MyEpicRectangle);
+```
+
+### Example 6: Use a video to render it as a rectangle.
+```html
+<video class="my-video" loop autoplay muted>
+    <source src="my-video.mp4" type="video/mp4"></source>
+</video> 
+```
+
+
+```js
+import * as Oktay2D from "path_to_lib_here";
+
+...
+
+const MyEpicRectangle = new Oktay2D.Rectangle(20, 20, 55, 30, {
+    backgroundImage: document.querySelector(".my-video")
+});
 
 // Render the rectangle.
 MyRenderer.Render(MyEpicRectangle);

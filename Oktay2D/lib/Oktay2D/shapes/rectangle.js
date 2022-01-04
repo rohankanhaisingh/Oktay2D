@@ -11,7 +11,7 @@ export class Rectangle extends RenderObject {
      * 
      * @param {object} style Rectangle style
      * @param style.backgroundColor {string | ColorNode}
-     * @param style.backgroundImage {Image}
+     * @param style.backgroundImage {Image | HTMLVideoElement}
      * @param style.borderColor {string | ColorNode}
      * @param style.borderWidth {number}
      * @param style.shadowOffsetX {number}
@@ -19,6 +19,7 @@ export class Rectangle extends RenderObject {
      * @param style.shadowColor {string | ColorNode}
      * @param style.shadowBlur {number}
      * @param style.opacity {number}
+     * @param style.filter {string}
      */
     constructor(x, y, width, height, style) {
 
@@ -28,8 +29,6 @@ export class Rectangle extends RenderObject {
         this.y = y;
         this.width = width;
         this.height = height;
-
-        // TODO: Create shape settings method.
 
         this.rotation = null;
         this.transformation = null;
@@ -45,7 +44,7 @@ export class Rectangle extends RenderObject {
         ctx.save();
         ctx.beginPath();
 
-        ctx.translate(this.x, this.y);
+        // ctx.translate(this.x, this.y);
 
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
 
@@ -60,6 +59,8 @@ export class Rectangle extends RenderObject {
                 this.transformation.verticalTranslation,
             );
         }
+
+        if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
 
@@ -85,17 +86,20 @@ export class Rectangle extends RenderObject {
         if (this.style.shadowColor instanceof Color) ctx.shadowColor = typeof this.style.shadowColor.hex !== null ? this.style.shadowColor.hex : null;
         else ctx.shadowColor = typeof this.style.shadowColor === "string" ? this.style.shadowColor : null;
 
-        if (typeof this.style.backgroundImage !== "undefined" && this.style.backgroundImage instanceof Image) {
+        if (typeof this.style.backgroundImage !== "undefined" && (this.style.backgroundImage instanceof Image)) {
 
+            // ctx.drawImage(this.style.backgroundImage, 0, 0, this.width, this.height);
             ctx.drawImage(this.style.backgroundImage, this.x, this.y, this.width, this.height);
 
 
         } else {
-            ctx.rect(0, 0, this.width, this.height);
+            ctx.rect(this.x, this.y, this.width, this.height);
 
             ctx.fill();
             ctx.stroke();
         }
+
+        ctx.closePath();
         ctx.restore();
 
     }
@@ -117,6 +121,7 @@ export class Rectangle extends RenderObject {
 
             return this;
         }
+
 
         this.transformation = {
             horizontalScaling: horizontalScaling,

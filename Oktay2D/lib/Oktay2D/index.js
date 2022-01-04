@@ -1,5 +1,6 @@
 import { generateUniqueID } from "./essentials/generateUniqueId.js";
 import { RenderObject, RenderObjects } from "./essentials/renderobject.js";
+import { Camera } from "./rendering/camera.js";
 
 export class CanvasScene {
     /**
@@ -148,6 +149,22 @@ export class CanvasScene {
 }
 
 export class Renderer {
+
+    /**@type {CanvasScene} */
+    scene;
+
+    /**@type {Array} */
+    attributes;
+
+    /**@type {Array} */
+    renderObjects;
+
+    /**@type {CanvasRenderingContext2D} */
+    ctx;
+
+    /**@type {Camera} */
+    camera;
+
     /**
      * Creates a new canvas2d renderings context.
      * @param {CanvasScene} scene CanvasScene instance to draw the graphics on.
@@ -169,7 +186,16 @@ export class Renderer {
 
         this.ctx = scene.canvas.getContext("2d", attributes);
 
+
+        this.camera = null;
+
         scene.appliedRenderer = this;
+    }
+    UpdateCamera(x, y) {
+
+        this.ctx.beginPath();
+
+        this.ctx.translate(x, y);
     }
     /** Saving the current canvas rendering state. */
     SaveState() {
@@ -208,6 +234,64 @@ export class Renderer {
 
         return this;
     }
+    /**Renders all objects added to this renderer. */
+    RenderAllObjects() {
+
+        const ctx = this.ctx;
+
+        if (this.camera instanceof Camera) {
+
+            ctx.save();
+
+            ctx.translate(this.camera.x, this.camera.y);
+            ctx.scale(this.camera.scaleX, this.camera.scaleY);
+
+            let i = 0;
+
+            while (i < this.renderObjects.length) {
+
+                /**@type {RenderObject} */
+                const object = this.renderObjects[i];
+
+                if (this.camera.offscreenRendering) {
+
+                    if (typeof object.width === "number" && typeof object.height === "number") {
+
+                        if (object.x > -((this.camera.x + 30) / this.camera.scaleX) && object.x < -((this.camera.x - this.camera.width) / this.camera.scaleX) &&
+                            object.y > -((this.camera.y + 30) / this.camera.scaleY) && object.y < -((this.camera.y - (this.camera.height))) / this.camera.scaleY) {
+
+
+                            if (typeof object.Draw === "function") object.Draw(this.ctx);
+
+                        }
+
+                    }
+
+                }
+
+                i += 1;
+            }
+
+
+            ctx.restore();
+
+            return this;
+        }
+
+        let i = 0;
+
+        while (i < this.renderObjects.length) {
+
+            /**@type {RenderObject} */
+            const object = this.renderObjects[i];
+
+            if (typeof object.Draw === "function") object.Draw(this.ctx);
+
+            i += 1;
+        }
+
+        return this;
+    }
     /**
      * Renders an object in this renderer instance.
      * @param {RenderObject} renderObject
@@ -216,21 +300,20 @@ export class Renderer {
 
         if (!(renderObject instanceof RenderObject)) {
 
-            let i = 0;
+            this.RenderAllObjects();
 
-            while (i < this.renderObjects.length) {
+            return;
+        }
 
-                const object = this.renderObjects[i];
+        const ctx = this.ctx;
 
-                if (typeof object.Draw === "function") object.Draw(this.ctx);
+        ctx.save();
 
-                i += 1;
-            }
-
-            return this;
-        };
+        ctx.translate(this.camera.x, this.camera.y);
 
         if (typeof renderObject.Draw === "function") renderObject.Draw(this.ctx);
+
+        ctx.restore();
 
     }
     /**Clears the entire screen */
@@ -277,9 +360,58 @@ export class Renderer {
         }
 
     }
+    /**
+     * Removes a RenderObject instance from this renderer.
+     * @param {RenderObject} renderObject
+     */
+    Remove(renderObject) {
+
+        if (!(renderObject instanceof RenderObject)) throw new Error("The given argument is not a RenderObject instance.");
+
+        let i = 0;
+
+        while (i < this.renderObjects.length) {
+
+            const obj = this.renderObjects[i];
+
+            if (obj.id === renderObject.id) {
+
+                this.renderObjects.splice(i, 1);
+
+                i = this.renderObjects.length - 1;
+
+                return;
+            }
+
+            i += 1;
+        }
+
+    }
 }
 
 export class SceneUpdater {
+
+    /**@type {string} */
+    id;
+
+    /**@type {Renderer} */
+    renderer;
+
+    /**@type {AnimationFrameProvider} */
+    animationFrame;
+
+    /**@type {number} */
+    fps;
+
+    /**@type {Array} */
+    times;
+
+    /**@type {number} */
+    deltaTime;
+
+    /**@type {Object} */
+    events;
+
     /**
      * Creates a new scene updater. This instance creates a animation loop which will call itself each possible frame.
      * @param {Renderer} renderer
@@ -346,6 +478,20 @@ export class SceneUpdater {
     }
 }
 
+/**
+ * Waits for a specific time to continue executing code in a codeblock.
+ * @param {number} milliseconds
+ */
+export async function WaitFor(milliseconds) {
+
+    if (typeof milliseconds !== "number") throw new Error("The given argument (as milliseconds) is not a number.");
+
+    return new Promise(function (resolve, reject) {
+
+        setTimeout(resolve, milliseconds);
+
+    });
+}
 
 // Export from other files.
 export { Rectangle } from "./shapes/rectangle.js";
@@ -353,7 +499,9 @@ export { Circle } from "./shapes/circle.js";
 export { Color, ColorNode, LinearGradientColorNode } from "./essentials/color.js";
 export { AudioNode } from "./audio/audioNode.js";
 export { TextNode } from "./rendering/text.js";
+export { FrameCapturer } from "./rendering/canvasEncoder.js";
 export { RenderObject };
 
 export { generateUniqueID };
 export * as Math from "./essentials/math.js";
+export { Camera } from "./rendering/camera.js";

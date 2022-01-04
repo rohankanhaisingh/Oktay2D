@@ -56,3 +56,14 @@ This method will filter specific characters or symbols from the generated ID. Th
 - ``lettersLowerCase``: Filtering **all** letters in lower case only from the generated ID.
 
 Calling this method will return a ``string``.
+
+
+## Examples
+
+### Example 1: Create a ID with a length of 12
+
+```js
+import * as Oktay2D from "path_to_lib_here";
+
+const MyEpicID = Oktay2D.GenerateUniqueID(12);
+```
