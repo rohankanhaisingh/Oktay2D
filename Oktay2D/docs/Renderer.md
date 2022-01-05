@@ -6,7 +6,7 @@ class Renderer;
 
 Creating a ``Renderer`` instance will allow you to draw graphics. 
 
-_Last edited: 04-01-2022_
+_Last edited: 05-01-2022_
 - - - 
 
 ## Arguments
@@ -22,13 +22,13 @@ new Renderer(scene: CanvasScene, attributes: object)
 
 ```ts
 {
-    willReadFrequently: number // Allowing the canvas to read pixel data frequently, will optimise renderer.
+    willReadFrequently: boolean // Allowing the canvas to read pixel data frequently, will optimise renderer.
 }
 ```
 
 ## Methods
 
-### SetBackgroundColor(color)
+### ``SetBackgroundColor(color)``
 
 ```ts
 Renderer: SetBackgroundColor(color: string);
@@ -40,7 +40,7 @@ Calling this method will set a background color, which requires one argument tha
 
 Calling this method will return the created ``Renderer`` instance.
 
-### Render(renderObject)
+### ``Render(renderObject)``
 
 ```ts
 Renderer: Render(renderObject: RenderObject);
@@ -55,7 +55,7 @@ Calling this method will render a specific ``RenderObject`` instance, which requ
 
 Calling this method will return the created ``Renderer`` instance.
 
-### ClearScene()
+### ``ClearScene()``
 
 ```ts
 void ClearScene();
@@ -64,7 +64,7 @@ void ClearScene();
 Calling this method will clear the entire scene, can be used in animation frames.
 
 
-### Add(renderObject)
+### ``Add(renderObject)``
 
 ```ts
 Renderer: Add(renderObject: RenderObject | Array)
@@ -78,6 +78,29 @@ This method requires one argument that has to be either a ``RenderObject`` or an
 - ``renderObject``: ``RenderObject`` instance or an array with ``RenderObject`` instances in it.
 
 Calling this method will return the created ``Renderer`` instance.
+
+### ``SetGlobalTransformation(..args)``
+
+```ts
+Rectangle: SetGlobalTransformation(
+    horizontalScaling: number
+    verticalSkewing: number
+    horizontalSkewing: number
+    verticalScaling: number 
+    horizontalTranslation: number
+    verticalTranslation: number
+);
+```
+
+Will set a global matrix transformation. This method requires 6 arguments, that has to be **all** a number.
+
+- ``horizontalScaling``: Horizontal scaling. A value of '1' results in no scaling.
+- ``verticalSkewing``: Vertical skewing.
+- ``horizontalSkewing``: Horizontal skewing.
+- ``verticalScaling``: Vertical scaling. A value of '1' results in no scaling.
+- ``horizontalTranslation``: Horizontal translation.
+- ``verticalTranslation``: etical translation.
+
 
 ## Properties
 - ``scene``: Applied ``CanvasScene`` instance.

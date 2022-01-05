@@ -7,6 +7,8 @@ class CanvasScene;
 Creating a ``CanvasScene`` instance will create a canvas element to draw graphics on. This is required in order to continue
 the drawing process.
 
+
+_Last edited: 05-01-2022_
 - - -
 
 ## Arguments
@@ -23,26 +25,26 @@ new CanvasScene(width: number, height: number, domElement: HTMLElement);
 
 ## Methods
 
-### HandleEvents()
+### ``HandleEvents()``
 
 ```ts
-void HandleEvents();
+HandleEvents();
 ```
 
 Method that will automatically be called when a new instance of ``CanvasScene`` has been made. No need to re-call that method.
 
-### HandleResizeEvent()
+### ``HandleResizeEvent()`` 
 
 ```ts
-void HandleResizeEvent();
+HandleResizeEvent();
 ```
 
 Method that will automatically be called when a new instance of ``CanvasScene`` has been made. No need to re-call that method.
 
-### SetSize(width, height)
+### ``SetSize(width, height)`` 
 
 ```ts
-CanvasScene SetSize(width: number, height: number);
+SetSize(width: number, height: number);
 ```
 
 Calling this method will set the size of the created canvas element. Calling this method requires two arguments which has to be
@@ -53,10 +55,10 @@ either a ``number`` or ``null``.
 
 This method will return the created ``CanvasScene`` instance.
 
-### SetAttribute(attribute)
+### ``SetAttribute(attribute)``
 
 ```ts
-void SetAttribute(attribute: string);
+SetAttribute(attribute: string);
 ```
 
 Calling this method will set attributes on this instance, leading to change the behavior of the canvas element. This method
@@ -85,10 +87,80 @@ attributes: Array<"fitToScreen", "disableContextMenu", "redrawOnResize">
 Mouse object properties.
 ```ts
 mouse: {
-    x: number,
-    y: number
+    x: number;
+    y: number;
+    velocityY: number;
+    velocityX: number;
+    lastTimestamp: number;
+    wheelDirection: number | null;
+    buttons: {
+        left: boolean,
+        middle: boolean,
+        right: boolean,
+    },
+    isInWindow: boolean
 }
 ```
+
+## Events
+
+### ``sceneResize``
+
+```js
+On("sceneResize", self => {});
+```
+
+The ``sceneResize`` event will fire when the scene has been resized. When calling the callback function, 
+it will pass the instance it self.
+
+### ``mouseDown``
+
+```js
+On("mouseDown", (mouse, self) => {});
+```
+
+The ``mouseDown`` event will fire when the user has any of their mouse buttons down. Will call the callbackfunction
+with the ``mouse`` property and the instance itself.
+
+### ``mouseUp``
+
+```js
+On("mouseUp", (mouse, self) => {});
+```
+
+Basically the same as the event above but this time it's when the user has any of their mouse buttons up.
+
+### ``mouseMove`` 
+
+```js
+On("mouseMove", (mouse, self) => {});
+```
+
+The ``mouseMove`` event will fire when the user has moved their mouse. Will call the callback function with the ``mouse`` property and the instance itself.
+
+### ``mouseOut``
+
+```js
+On("mouseOut", (mouse, self) => {});
+```
+ 
+The event ``mouseOut`` will fire if the user left the mouse out of the window. Will call the callback function with the ``mouse`` property and the instance itself.
+
+### ``mouseEnter``
+
+```js
+On("mouseEnter", (mouse, self) => {});
+```
+
+Basically the same as above but instead of leaving, it will fire when the user enter the window. Will call the callback function with the ``mouse`` property and the instance itself.
+
+### ``mouseWheel``
+
+```js
+On("mouseWheel", (mouse, self) => {});
+```
+
+The event ``mouseWheel`` will fire if the user has any interaction with their mousewheel. Will call the callback function with the ``mouse`` property and the instance itself. 
 
 ## Examples
 

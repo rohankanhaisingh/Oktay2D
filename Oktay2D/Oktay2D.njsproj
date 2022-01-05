@@ -47,6 +47,9 @@
     <Content Include="lib\Oktay2D\shapes\circle.js" />
     <Content Include="lib\Oktay2D\shapes\rectangle.js" />
     <Content Include="lib\Oktay2D\todo.txt" />
+    <Content Include="lib\WhammyJS\WhammyJS.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
     <Content Include="public\css\canvas.css" />
     <Content Include="public\index.html">
@@ -61,6 +64,7 @@
     <Folder Include="docs\audio\" />
     <Folder Include="docs\shapes\" />
     <Folder Include="lib\" />
+    <Folder Include="lib\WhammyJS\" />
     <Folder Include="lib\Oktay2D\" />
     <Folder Include="lib\Oktay2D\audio\" />
     <Folder Include="lib\Oktay2D\essentials\" />

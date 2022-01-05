@@ -3,6 +3,9 @@ import { RenderObject, RenderObjects } from "./essentials/renderobject.js";
 import { Camera } from "./rendering/camera.js";
 
 export class CanvasScene {
+
+    #_events = {};
+
     /**
      * Creates a new Canvas Scene
      * @param {number} width
@@ -22,7 +25,17 @@ export class CanvasScene {
 
         this.mouse = {
             x: 0,
-            y: 0
+            y: 0,
+            velocityY: 0,
+            velocityX: 0,
+            lastTimestamp: 0,
+            wheelDirection: null,
+            buttons: {
+                left: false,
+                middle: false,
+                right: false,
+            },
+            isInWindow: false
         }
 
         // Create the element.
@@ -47,14 +60,87 @@ export class CanvasScene {
     }
     HandleEvents() {
 
+        // Mouse move event
         this.canvas.addEventListener("mousemove", event => {
+
+            const now = performance.now(),
+                deltaTime = now - this.mouse.lastTimestamp,
+                distanceX = Math.abs(event.offsetX - this.mouse.x),
+                speedX = Math.round(distanceX / deltaTime * 1000),
+                distanceY = Math.abs(event.offsetY - this.mouse.y),
+                speedY = Math.round(distanceY / deltaTime * 1000);
+
+            this.mouse.velocityX = speedX;
+            this.mouse.velocityY = speedY;
+            
             this.mouse.x = event.offsetX;
             this.mouse.y = event.offsetY;
+
+            this.mouse.lastTimestamp = now;
+
+            if (typeof this.#_events["mouseMove"] === "function") this.#_events["mouseMove"](this.mouse, this);
         });
 
+        // Mouse down event.
+        this.canvas.addEventListener("mousedown", event => {
 
+            switch (event.button) {
+
+                case 0: this.mouse.buttons.left = true; break;
+                case 1: this.mouse.buttons.middle = true; break;
+                case 2: this.mouse.buttons.right = true; break;
+            }
+
+            if (typeof this.#_events["mouseDown"] === "function") this.#_events["mouseDown"](this.mouse, this);
+
+        });
+
+        // Mouse up event.
+        this.canvas.addEventListener("mouseup", event => {
+
+            switch (event.button) {
+
+                case 0: this.mouse.buttons.left = false; break;
+                case 1: this.mouse.buttons.middle = false; break;
+                case 2: this.mouse.buttons.right = false; break;
+            }
+
+            if (typeof this.#_events["mouseUp"] === "function") this.#_events["mouseUp"](this.mouse, this);
+        });
+
+        // Mouse out event.
+        this.canvas.addEventListener("mouseout", event => {
+
+            this.mouse.x = 0;
+            this.mouse.y = 0;
+
+            this.mouse.isInWindow = false;
+
+            if (typeof this.#_events["mouseOut"] === "function") this.#_events["mouseOut"](this.mouse, this);
+        });
+
+        // Mouse enter event.
+        this.canvas.addEventListener("mouseenter", event => {
+
+            this.mouse.isInWindow = true;
+
+            if (typeof this.#_events["mouseEnter"] === "function") this.#_events["mouseEnter"](this.mouse, this);
+        });
+
+        // Mouse wheel event.
+        this.canvas.addEventListener("wheel", event => {
+
+            if (event.deltaY < 0) this.mouse.wheelDirection = "top";
+            if (event.deltaY > 0) this.mouse.wheelDirection = "down";
+            if (event.deltaX < 0) this.mouse.wheelDirection = "left";
+            if (event.deltaX > 0) this.mouse.wheelDirection = "right";
+
+            if (typeof this.#_events["mouseWheel"] === "function") this.#_events["mouseWheel"](this.mouse, this);
+        });
     }
     HandleResizeEvent() {
+
+        if (typeof this.#_events["sceneResize"] === "function") this.#_events["sceneResize"](this);
 
         if (this.attributes.includes("fitToScreen")) {
 
@@ -146,6 +232,39 @@ export class CanvasScene {
         }
 
     }
+    /**
+     * Will export the canvas data to an image.
+     * @param {("png" | "webp" | "jpeg" | "jpg")} format Image format
+     * @returns {string | null}
+     */
+    ExportToImage(format) {
+
+        if (typeof format === "undefined") return this.canvas.toDataURL();
+
+        return this.canvas.toDataURL("image/" + format);
+
+    }
+    /**
+     * Event listener.
+     * @param {"sceneResize" | "mouseDown" | "mouseUp" | "mouseMove" | "mouseOut" | "mouseEnter" | "mouseWheel"} event
+     * @param {Function} callback
+     */
+    On(event, callback) {
+
+        let possibleEvents = ["sceneResize", "mouseDown", "mouseUp", "mouseMove", "mouseOut", "mouseEnter", "mouseWheel"],
+            isValidEvent = false;
+
+
+        for (let key in possibleEvents) {
+            if (possibleEvents[key] === event) isValidEvent = true;
+        }
+
+        if (!isValidEvent) throw new Error(`The given event name '${event}' is not a valid event for this instance.`);
+
+        if (typeof callback !== "function") throw new Error("The given argument (as callback) is not a function.");
+
+        this.#_events[event] = callback;
+    }
 }
 
 export class Renderer {
@@ -185,6 +304,9 @@ export class Renderer {
         this.renderObjects = [];
 
         this.ctx = scene.canvas.getContext("2d", attributes);
+
+
+        this.globalTransformation = null;
 
 
         this.camera = null;
@@ -243,7 +365,19 @@ export class Renderer {
 
             ctx.save();
 
-            ctx.translate(this.camera.x, this.camera.y);
+            // Global tranformation
+            if (this.globalTransformation !== null) {
+                ctx.transform(
+                    this.globalTransformation.horizontalScaling,
+                    this.globalTransformation.verticalSkewing,
+                    this.globalTransformation.horizontalSkewing,
+                    this.globalTransformation.verticalScaling,
+                    this.globalTransformation.horizontalTranslation,
+                    this.globalTransformation.verticalTranslation,
+                );
+            }
+
+            ctx.translate(-this.camera.x, -this.camera.y);
             ctx.scale(this.camera.scaleX, this.camera.scaleY);
 
             let i = 0;
@@ -253,7 +387,7 @@ export class Renderer {
                 /**@type {RenderObject} */
                 const object = this.renderObjects[i];
 
-                if (this.camera.offscreenRendering) {
+                if (!this.camera.offscreenRendering) {
 
                     if (typeof object.width === "number" && typeof object.height === "number") {
 
@@ -267,6 +401,10 @@ export class Renderer {
 
                     }
 
+                } else {
+
+                    if (typeof object.Draw === "function") object.Draw(this.ctx);
+
                 }
 
                 i += 1;
@@ -276,21 +414,37 @@ export class Renderer {
             ctx.restore();
 
             return this;
+        } else {
+            ctx.save();
+
+            // Global tranformation
+            if (this.globalTransformation !== null) {
+                ctx.transform(
+                    this.globalTransformation.horizontalScaling,
+                    this.globalTransformation.verticalSkewing,
+                    this.globalTransformation.horizontalSkewing,
+                    this.globalTransformation.verticalScaling,
+                    this.globalTransformation.horizontalTranslation,
+                    this.globalTransformation.verticalTranslation,
+                );
+            }
+
+            let i = 0;
+
+            while (i < this.renderObjects.length) {
+
+                /**@type {RenderObject} */
+                const object = this.renderObjects[i];
+
+                if (typeof object.Draw === "function") object.Draw(this.ctx);
+
+                i += 1;
+            }
+
+            ctx.restore();
+
+            return this;
         }
-
-        let i = 0;
-
-        while (i < this.renderObjects.length) {
-
-            /**@type {RenderObject} */
-            const object = this.renderObjects[i];
-
-            if (typeof object.Draw === "function") object.Draw(this.ctx);
-
-            i += 1;
-        }
-
-        return this;
     }
     /**
      * Renders an object in this renderer instance.
@@ -387,6 +541,37 @@ export class Renderer {
         }
 
     }
+
+    /**
+    * Sets a global transformation matrix.
+    * @param {number} horizontalScaling Horizontal scaling. A value of '1' results in no scaling.
+    * @param {number} verticalSkewing Vertical skewing.
+    * @param {number} horizontalSkewing Horizontal skewing.
+    * @param {number} verticalScaling Vertical scaling. A value of '1' results in no scaling.
+    * @param {number} horizontalTranslation Horizontal translation.
+    * @param {number} verticalTranslation Vetical translation.
+    */
+    SetGlobalTranformation(horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation) {
+
+        if (horizontalScaling === null) {
+
+            this.globalTransformation = null;
+
+            return this;
+        }
+
+
+        this.globalTransformation = {
+            horizontalScaling: horizontalScaling,
+            verticalSkewing: verticalSkewing,
+            horizontalSkewing: horizontalSkewing,
+            verticalScaling: verticalScaling,
+            horizontalTranslation: horizontalTranslation,
+            verticalTranslation: verticalTranslation
+        }
+
+        return this.globalTransformation;
+    }
 }
 
 export class SceneUpdater {
@@ -412,6 +597,12 @@ export class SceneUpdater {
     /**@type {Object} */
     events;
 
+    /**@type {number} */
+    lastTimestamp;
+
+    /**@type {number} */
+    perfrectFrameRate;
+
     /**
      * Creates a new scene updater. This instance creates a animation loop which will call itself each possible frame.
      * @param {Renderer} renderer
@@ -429,6 +620,8 @@ export class SceneUpdater {
         this.fps = 0;
         this.times = [];
         this.deltaTime = 0;
+        this.lastTimestamp = performance.now();
+        this.perfrectFrameRate = 60;
 
         this.events = {
             onUpdate: []
@@ -438,17 +631,21 @@ export class SceneUpdater {
 
         this.animationFrame = window.requestAnimationFrame((d) => this.Update(d));
 
+        const now = performance.now();
+
+        this.deltaTime = (now - this.lastTimestamp) / (1000 / this.perfrectFrameRate);
+
+        this.lastTimestamp = now;
+
         for (let i = 0; i < this.events.onUpdate.length; i++) {
 
             let updateEvent = this.events.onUpdate[i];
 
-            if (typeof updateEvent === "function") updateEvent(timeStamp);
+            if (typeof updateEvent === "function") updateEvent(this.deltaTime);
 
         }
 
         if (typeof this.renderer !== "undefined") this.renderer.Render();
-
-        const now = performance.now();
 
         while (this.times.length > 0 && this.times[0] <= now - 1000) this.times.shift();
 

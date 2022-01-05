@@ -44,7 +44,7 @@ export class Rectangle extends RenderObject {
         ctx.save();
         ctx.beginPath();
 
-        // ctx.translate(this.x, this.y);
+        ctx.translate(this.x, this.y);
 
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
 
@@ -86,14 +86,14 @@ export class Rectangle extends RenderObject {
         if (this.style.shadowColor instanceof Color) ctx.shadowColor = typeof this.style.shadowColor.hex !== null ? this.style.shadowColor.hex : null;
         else ctx.shadowColor = typeof this.style.shadowColor === "string" ? this.style.shadowColor : null;
 
-        if (typeof this.style.backgroundImage !== "undefined" && (this.style.backgroundImage instanceof Image)) {
+        if (typeof this.style.backgroundImage !== "undefined" && (this.style.backgroundImage instanceof Image || this.style.backgroundImage instanceof HTMLVideoElement)) {
 
-            // ctx.drawImage(this.style.backgroundImage, 0, 0, this.width, this.height);
-            ctx.drawImage(this.style.backgroundImage, this.x, this.y, this.width, this.height);
+            ctx.drawImage(this.style.backgroundImage, 0, 0, this.width, this.height);
+            //ctx.drawImage(this.style.backgroundImage, this.x, this.y, this.width, this.height);
 
 
         } else {
-            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.rect(0, 0, this.width, this.height);
 
             ctx.fill();
             ctx.stroke();

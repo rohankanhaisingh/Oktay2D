@@ -20,6 +20,7 @@ export class TextNode extends RenderObject {
      * @param style.shadowBlur {number}
      * @param style.shadowOffsetX {number}
      * @param style.shadowOffsetY {number}
+     * @param style.strokeColor {string}
      */
     constructor(text, x, y, style) {
         super();
@@ -31,6 +32,9 @@ export class TextNode extends RenderObject {
         this.x = x;
         this.y = y;
         this.style = style;
+
+        this.rotation = null;
+        this.transformation = null;
     }
     /**
      * Draws content.
@@ -42,6 +46,23 @@ export class TextNode extends RenderObject {
 
         ctx.save();
         ctx.beginPath();
+
+        ctx.translate(this.x, this.y);
+
+        if (typeof this.rotation === "number") ctx.rotate(this.rotation);
+
+        if (this.transformation !== null) {
+
+            ctx.transform(
+                this.transformation.horizontalScaling,
+                this.transformation.verticalSkewing,
+                this.transformation.horizontalSkewing,
+                this.transformation.verticalScaling,
+                this.transformation.horizontalTranslation,
+                this.transformation.verticalTranslation,
+            );
+        }
+
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
 
@@ -59,9 +80,64 @@ export class TextNode extends RenderObject {
         if (this.style.textColor instanceof Color) ctx.fillStyle = typeof this.style.textColor.hex !== null ? this.style.textColor.hex : "transparent";
         else ctx.fillStyle = typeof this.style.textColor === "string" ? this.style.textColor : "black";
 
-        ctx.fillText(this.text, this.x, this.y);
+        if (this.style.strokeColor instanceof Color) ctx.strokeStyle = typeof this.style.strokeColor.hex !== null ? this.style.strokeColor.hex : "transparent";
+        else ctx.strokeStyle = typeof this.style.strokeColor === "string" ? this.style.strokeColor : "black";
+
+        if (typeof this.style.strokeColor !== "undefined") ctx.strokeText(this.text, 0, 0);
+        if (typeof this.style.textColor !== "undefined") ctx.fillText(this.text, 0, 0);
 
         ctx.restore();
 
+    }
+    /**
+    * Sets matrix transform on shape.
+    * @param {number} horizontalScaling Horizontal scaling. A value of '1' results in no scaling.
+    * @param {number} verticalSkewing Vertical skewing.
+    * @param {number} horizontalSkewing Horizontal skewing.
+    * @param {number} verticalScaling Vertical scaling. A value of '1' results in no scaling.
+    * @param {number} horizontalTranslation Horizontal translation.
+    * @param {number} verticalTranslation Vetical translation.
+    */
+    SetTransform(horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation) {
+
+        if (horizontalScaling === null) {
+
+            this.transformation = null;
+
+            return this;
+        }
+
+
+        this.transformation = {
+            horizontalScaling: horizontalScaling,
+            verticalSkewing: verticalSkewing,
+            horizontalSkewing: horizontalSkewing,
+            verticalScaling: verticalScaling,
+            horizontalTranslation: horizontalTranslation,
+            verticalTranslation: verticalTranslation
+        }
+
+        return this.transformation;
+
+    }
+
+    /**
+     * Sets rotation on shape.
+     * @param {number | null} angle The rotation angle, clockwise in radians. You can use degree * Math.PI / 180 to calculate a radian from a degree.
+     */
+    SetRotation(angle) {
+
+        if (angle === null) {
+
+            this.rotation = null;
+
+            return this;
+        }
+
+        if (typeof angle !== "number") throw new Error("The given argument (as angle) is not a number.");
+
+        this.rotation = angle;
+
+        return this;
     }
 }
