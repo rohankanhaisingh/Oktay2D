@@ -703,8 +703,7 @@ export { generateUniqueID };
 export * as Math from "./essentials/math.js";
 export { Camera } from "./rendering/camera.js";
 export { GetInputDown, GetInputUp } from "./essentials/keyboard.js";
-
-
-// Animators
-
+export { GamePad, ConnectedGamePads } from "./essentials/gamepad.js";
 export { AnimateSingleInteger } from "./essentials/animator.js";
+
+export { PhysicsController } from "./controllers/physicsController.js";

@@ -27,7 +27,7 @@ export class RenderObject {
 
         ObjectCount += 1;
 
-        RenderObjects.push(this);
+        if (RenderObject.AddToGlobalArray) RenderObjects.push(this);
     }
     Destroy() {
 
@@ -50,7 +50,10 @@ export class RenderObject {
 
     }
 
+
     // Static methods.
+
+    static AddToGlobalArray = true;
 
     static GetAllRenderObjects() {
 

@@ -44,11 +44,13 @@
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
     <Content Include="lib\Oktay2D\essentials\animator.js" />
     <Content Include="lib\Oktay2D\essentials\color.js" />
+    <Content Include="lib\Oktay2D\essentials\gamepad.js" />
     <Content Include="lib\Oktay2D\essentials\generateUniqueId.js" />
     <Content Include="lib\Oktay2D\essentials\keyboard.js" />
     <Content Include="lib\Oktay2D\essentials\math.js" />
     <Content Include="lib\Oktay2D\essentials\renderobject.js" />
     <Content Include="lib\Oktay2D\index.js" />
+    <Content Include="lib\Oktay2D\controllers\physicsController.js" />
     <Content Include="lib\Oktay2D\rendering\camera.js" />
     <Content Include="lib\Oktay2D\rendering\text.js" />
     <Content Include="lib\Oktay2D\rendering\canvasEncoder.js" />
@@ -66,6 +68,7 @@
     <Content Include="public\examples\example-3.js" />
     <Content Include="public\examples\example-4.js" />
     <Content Include="public\examples\example-5.js" />
+    <Content Include="public\examples\example-6.js" />
     <Content Include="public\index.html">
       <SubType>Code</SubType>
     </Content>
@@ -78,6 +81,7 @@
     <Folder Include="docs\essentials\maths\" />
     <Folder Include="docs\shapes\" />
     <Folder Include="lib\" />
+    <Folder Include="lib\Oktay2D\controllers\" />
     <Folder Include="lib\Oktay2D\_dev\" />
     <Folder Include="lib\Oktay2D\_dev\keys\" />
     <Folder Include="lib\WhammyJS\" />
