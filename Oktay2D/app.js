@@ -9,13 +9,8 @@ const { app, BrowserWindow, ipcMain } = electron;
 // Mutable variable.
 let mainBrowserWindow = null;
 
-//const app = express();
 
-//app.use(cors());
 
-//app.use(express.static('./', { extensions: ['html'] }));
-
-//const server = app.listen(8000);
 
 app.once("ready", function (ElectronApplicationReadyState) {
 
@@ -37,12 +32,11 @@ app.once("ready", function (ElectronApplicationReadyState) {
         }
     });
 
-    // mainBrowserWindow.setMenu(null);
-
     mainBrowserWindow.loadURL(url.format({
         pathname: path.join(__dirname, "public", "index.html"),
         slashes: true,
         protocol: "file:"
     }));
+
 
 });

@@ -49,6 +49,22 @@ export class ColorNode extends Color {
         this.rgb = hexToRgb(value);
         this.hex = rgbToHex(value);
 
+        this.red = hexToRgb(this.hex)[0];
+        this.green = hexToRgb(this.hex)[1];
+        this.blue = hexToRgb(this.hex)[2];
+    }
+    /**
+     * Sets or change a color.
+     * @param {string | array} value
+     */
+    SetColor(value) {
+
+        this.rgb = hexToRgb(value);
+        this.hex = rgbToHex(value);
+
+        this.red = hexToRgb(this.hex)[0];
+        this.green = hexToRgb(this.hex)[1];
+        this.blue = hexToRgb(this.hex)[2];
     }
     /**
      * Generates a random color.

@@ -27,7 +27,8 @@ export class Circle extends RenderObject {
         this.x = x;
         this.y = y;
 
-
+        this.transformation = null;
+        this.rotation = null;
 
         this.radius = radius;
         this.startAngle = startAngle;
@@ -46,6 +47,22 @@ export class Circle extends RenderObject {
         ctx.beginPath();
 
         ctx.translate(this.x, this.y);
+
+        if (typeof this.rotation === "number") ctx.rotate(this.rotation);
+
+        if (this.transformation !== null) {
+
+            ctx.transform(
+                this.transformation.horizontalScaling,
+                this.transformation.verticalSkewing,
+                this.transformation.horizontalSkewing,
+                this.transformation.verticalScaling,
+                this.transformation.horizontalTranslation,
+                this.transformation.verticalTranslation,
+            );
+        }
+
+        if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
 
@@ -70,6 +87,7 @@ export class Circle extends RenderObject {
         // Shadow color.
         if (this.style.shadowColor instanceof Color) ctx.shadowColor = typeof this.style.shadowColor.hex !== null ? this.style.shadowColor.hex : null;
         else ctx.shadowColor = typeof this.style.shadowColor === "string" ? this.style.shadowColor : null;
+
 
         ctx.arc(0, 0, typeof this.radius === "number" ? this.radius : 10, typeof this.startAngle === "number" ? this.startAngle : 0, typeof this.endAngle === "number" ? this.endAngle : (2 * Math.PI));
 

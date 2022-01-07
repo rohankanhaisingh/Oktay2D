@@ -17,9 +17,11 @@ export class Rectangle extends RenderObject {
      * @param style.shadowOffsetX {number}
      * @param style.shadowOffsetY {number}
      * @param style.shadowColor {string | ColorNode}
+     * @param style.glowStrength {number}
      * @param style.shadowBlur {number}
      * @param style.opacity {number}
      * @param style.filter {string}
+     * @param style.globalCompositeOperation {"source-over" | "source-in" | "source-out" | "source-atop" | "destination-over" | "destination-in" | "destination-out" | "destination-atop" | "lighter"| "copy" | "xor" | "multiply" | "screen" | "overlay" | "darken" | "lighten" | "color-dodge" | "color-burn" | "hard-light" | "soft-light" | "difference" | "exclusion" | "hue" | "saturation" | "color" | "luminosity"}
      */
     constructor(x, y, width, height, style) {
 
@@ -30,6 +32,7 @@ export class Rectangle extends RenderObject {
         this.width = width;
         this.height = height;
 
+        this.rotateAroundPoint = true;
         this.rotation = null;
         this.transformation = null;
 
@@ -48,6 +51,7 @@ export class Rectangle extends RenderObject {
 
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
 
+
         if (this.transformation !== null) {
 
             ctx.transform(
@@ -63,6 +67,8 @@ export class Rectangle extends RenderObject {
         if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
+
+        ctx.globalCompositeOperation = typeof this.style.globalCompositeOperation === "string" ? this.style.globalCompositeOperation : null;
 
         // Background color
         if (this.style.backgroundColor instanceof Color) ctx.fillStyle = typeof this.style.backgroundColor.hex !== null ? this.style.backgroundColor.hex : "transparent";
@@ -93,10 +99,35 @@ export class Rectangle extends RenderObject {
 
 
         } else {
+
+
             ctx.rect(0, 0, this.width, this.height);
 
             ctx.fill();
             ctx.stroke();
+
+            if (typeof this.style.glowStrength === "number") {
+
+                ctx.save();
+
+                ctx.beginPath();
+
+                ctx.shadowBlur = this.style.glowStrength;
+
+                if (this.style.backgroundColor instanceof Color) ctx.shadowColor = typeof this.style.backgroundColor.hex !== null ? this.style.backgroundColor.hex : null;
+                else ctx.shadowColor = typeof this.style.backgroundColor === "string" ? this.style.backgroundColor : null;
+
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+
+                ctx.rect(0, 0, this.width, this.height);
+
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.restore()
+
+            }
         }
 
         ctx.closePath();

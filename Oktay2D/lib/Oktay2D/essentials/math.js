@@ -4,15 +4,18 @@
  * @param {number} number2
  */
 export function RandomBetween(number1, number2) {
+
     if (typeof number1 == "number" && typeof number2 == "number") {
         let randomNumber = Math.floor(Math.random() * (number2 - number1 + 1) + number1);
 
         return randomNumber;
     }
+
+    throw new Error("Cannot get a random number between two integers since arguments are not correct.");
 }
 
 /**
- * Returns a Atan 2 value.
+ * Returns an atan 2 value.
  * @param {number} x1
  * @param {number} y1
  * @param {number} x2

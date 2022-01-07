@@ -702,3 +702,9 @@ export { RenderObject };
 export { generateUniqueID };
 export * as Math from "./essentials/math.js";
 export { Camera } from "./rendering/camera.js";
+export { GetInputDown, GetInputUp } from "./essentials/keyboard.js";
+
+
+// Animators
+
+export { AnimateSingleInteger } from "./essentials/animator.js";

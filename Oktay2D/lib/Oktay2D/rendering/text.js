@@ -140,4 +140,5 @@ export class TextNode extends RenderObject {
 
         return this;
     }
+
 }

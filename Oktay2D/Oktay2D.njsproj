@@ -32,12 +32,20 @@
     <Content Include="docs\audio\AudioNode.md" />
     <Content Include="docs\CanvasScene.md" />
     <Content Include="docs\essentials\GenerateUniqueId.md" />
+    <Content Include="docs\essentials\maths\GetAverageValueFromArray.md" />
+    <Content Include="docs\essentials\maths\GetDistance.md" />
+    <Content Include="docs\essentials\maths\PolarDirection.md" />
+    <Content Include="docs\essentials\maths\RandomBetween.md" />
+    <Content Include="docs\essentials\maths\README.md" />
     <Content Include="docs\essentials\RenderObject.md" />
     <Content Include="docs\Renderer.md" />
+    <Content Include="docs\SceneUpdater.md" />
     <Content Include="docs\shapes\Rectangle.md" />
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
+    <Content Include="lib\Oktay2D\essentials\animator.js" />
     <Content Include="lib\Oktay2D\essentials\color.js" />
     <Content Include="lib\Oktay2D\essentials\generateUniqueId.js" />
+    <Content Include="lib\Oktay2D\essentials\keyboard.js" />
     <Content Include="lib\Oktay2D\essentials\math.js" />
     <Content Include="lib\Oktay2D\essentials\renderobject.js" />
     <Content Include="lib\Oktay2D\index.js" />
@@ -47,23 +55,31 @@
     <Content Include="lib\Oktay2D\shapes\circle.js" />
     <Content Include="lib\Oktay2D\shapes\rectangle.js" />
     <Content Include="lib\Oktay2D\todo.txt" />
+    <Content Include="lib\Oktay2D\_dev\keys\extractTextFile.js" />
+    <Content Include="lib\Oktay2D\_dev\keys\keys.txt" />
     <Content Include="lib\WhammyJS\WhammyJS.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
     <Content Include="public\css\canvas.css" />
+    <Content Include="public\examples\example-2.js" />
+    <Content Include="public\examples\example-3.js" />
+    <Content Include="public\examples\example-4.js" />
+    <Content Include="public\examples\example-5.js" />
     <Content Include="public\index.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="public\examples\example-1.js" />
-    <Content Include="public\examples\stream.js" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="docs\essentials\" />
     <Folder Include="docs\audio\" />
+    <Folder Include="docs\essentials\maths\" />
     <Folder Include="docs\shapes\" />
     <Folder Include="lib\" />
+    <Folder Include="lib\Oktay2D\_dev\" />
+    <Folder Include="lib\Oktay2D\_dev\keys\" />
     <Folder Include="lib\WhammyJS\" />
     <Folder Include="lib\Oktay2D\" />
     <Folder Include="lib\Oktay2D\audio\" />
