@@ -20,7 +20,6 @@ export function RandomBetween(number1, number2) {
  * @param {number} y1
  * @param {number} x2
  * @param {number} y2
- * @returns {object}
  */
 export function PolarDirection(x1, y1, x2, y2) {
 
@@ -125,4 +124,24 @@ export function FormatTimeStamp(time) {
     ret += "" + secs;
 
     return ret;
+}
+
+/**
+ * Calculates the angle between two coordinates.
+ * @param {number} cx 
+ * @param {number} cy
+ * @param {number} ex
+ * @param {number} ey
+ */
+export function CalculateAngle(cx, cy, ex, ey) {
+
+    let dy = ey - cy,
+        dx = ex - cx,
+        theta = Math.atan2(dy, dx);
+
+    theta *= 180 / Math.PI; 
+
+    if (theta < 0) theta = 360 + theta;
+
+    return theta;
 }

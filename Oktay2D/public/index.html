@@ -32,6 +32,89 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
 
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .gui.overlay-gui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99999;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .gui-fpsmeter {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            color: red;
+            font-size: 12px;
+        }
+
+        @-webkit-keyframes shake {
+            0% {
+                -webkit-transform: translate(3px, 4px) rotate(0deg);
+                -moz-filter: blur(5px);
+                -webkit-filter: blur(5px);
+                filter: blur(5px);
+            }
+
+            10% {
+                -webkit-transform: translate(-1px, -4px) rotate(-1deg);
+            }
+
+            20% {
+                -webkit-transform: translate(-3px, 0px) rotate(2deg);
+            }
+
+            30% {
+                -webkit-transform: translate(3px, 2px) rotate(0deg);
+                -moz-filter: blur(0px);
+                -webkit-filter: blur(0px);
+                filter: blur(0px);
+            }
+
+            40% {
+                -webkit-transform: translate(1px, -3px) rotate(1deg);
+            }
+
+            50% {
+                -webkit-transform: translate(-1px, 2px) rotate(-1deg);
+            }
+
+            60% {
+                -webkit-transform: translate(-2px, 1px) rotate(0deg);
+            }
+
+            70% {
+                -webkit-transform: translate(0px, 1px) rotate(-1deg);
+            }
+
+            80% {
+                -webkit-transform: translate(-1px, -0px) rotate(0deg);
+            }
+
+            90% {
+                -webkit-transform: translate(0px, 0px) rotate(1deg);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px) rotate(0deg);
+            }
+        }
+
+        canvas.shake {
+            -moz-animation: shake .5s ease;
+            -o-animation: shake .5s ease;
+            -webkit-animation: shake .5s ease;
+            animation: shake .5s ease;
+        }
+    </style>
+
     <title>Oktay2D</title>
 
     <link href="./css/canvas.css" rel="stylesheet" />
@@ -47,10 +130,38 @@
 
     -->
 
-    <img src="https://c1.wallpaperflare.com/preview/1023/340/990/sky-clouds-cloudy-sky-landscape.jpg" alt="Sky" class="sky-topdown" />
-    <img src="https://i.ytimg.com/vi/F_hAJEMZUKM/maxresdefault.jpg" alt="ZAMN!" class="zamn" />
+    <div class="gui overlay-gui">
+        
+        <!-- FPS meter -->
+        <div class="gui-fpsmeter">0fps</div>
+    </div>
 
-    <script src="../lib/WhammyJS/WhammyJS.js" defer type="text/javascript"></script>
-    <script type="module" src="examples/example-6.js" defer></script>
+    <!--Public images -->
+    <div class="public-images usable-example">
+
+        <!--
+            These dom elements can be used in as 'backgroundImage' in rectangles.
+            Use the regular in-build 'document.querySelector' method to use it. Images will automatically fit to the size of the graphic element.
+        -->
+
+        <!-- Topview skybox texture.-->
+        <img src="https://c1.wallpaperflare.com/preview/1023/340/990/sky-clouds-cloudy-sky-landscape.jpg" alt="Sky" class="sky-topdown" />
+
+        <!-- ZAMN! meme -->
+        <img src="https://i.ytimg.com/vi/F_hAJEMZUKM/maxresdefault.jpg" alt="ZAMN!" class="zamn" />
+
+        <!-- Cloud particle -->
+        <img src="./resources/particle_cloud.png" alt="Cloud particle" class="particle-cloud" />
+
+        <!-- Top down road image -->
+        <img src="https://3.bp.blogspot.com/-AdHChmLrCJM/VYyDTSMkUfI/AAAAAAAACHg/2ZgT6UWs94I/s1600/paper2dBackground.jpg" alt="Topdown road" class="road" />
+    </div>
+   
+
+    <!-- Unused SAT.js library. Already been imported in the library -->
+    <!--<script src="../lib/Oktay2D/libs/sat-js-0.9.0/SAT.js"></script>-->
+
+    <!-- Change the source path to see different examples. See directory 'public/examples' for all the available examples.-->
+    <script type="module" src="examples/example-7.js" defer></script>
 </body>
 </html>

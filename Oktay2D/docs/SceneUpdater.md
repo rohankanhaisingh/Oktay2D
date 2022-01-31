@@ -74,3 +74,49 @@ On("update", deltaTime => {});
 
 Event which will be fired when the updater has been updated. Will pass the delta time through, allowing developers
 to create linear constant animations.
+
+## Examples
+
+### Example 1: Create keep rendering a scene.
+
+```js
+import * as Oktay2D from "path_to_lib";
+
+// Create a new scene.
+const Scene = new Oktay2D.CanvasScene(500, 500, document.body),
+    Renderer = new Oktay2D.Renderer(Scene);
+
+// Initialize the updater and attach it to the renderer.
+const SceneUpdater = new Oktay2D.SceneUpdater(Renderer);
+
+...
+
+// Start the scene updater by calling it each animation frame.
+// ALl render objects applied to the render will be rendered automatically. 
+SceneUpdater.Updater(); 
+```
+
+### Example 2: Move a ``RenderObject`` based on the delta (accurate) time.
+
+```js
+import * as Oktay2D from "path_to_lib";
+
+// Create a new scene.
+const Scene = new Oktay2D.CanvasScene(500, 500, document.body),
+    Renderer = new Oktay2D.Renderer(Scene);
+
+// Initialize the updater and attach it to the renderer.
+const SceneUpdater = new Oktay2D.SceneUpdater(Renderer);
+
+...
+
+const MoveSpeed = 10;
+
+SceneUpdater.On("update", function(DeltaTime) {
+
+    // This will update the rectangle accurate, no matter what the frame rate is.
+    MyRectangle.x += MoveSpeed * DeltaTime;
+});
+
+SceneUpdater.Updater(); 
+```

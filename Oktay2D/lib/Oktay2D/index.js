@@ -1,6 +1,33 @@
+/**
+ *  =========================== Oktay2D ===========================
+ *  
+ *  A graphics library for the web made by Babah Gee.
+ * 
+ * 
+ */
+
 import { generateUniqueID } from "./essentials/generateUniqueId.js";
 import { RenderObject, RenderObjects } from "./essentials/renderobject.js";
 import { Camera } from "./rendering/camera.js";
+
+// Type definitions 
+/**
+* @typedef CanvasSceneMouseButtons
+* @property {boolean} right
+* @property {boolean} middle
+* @property {boolean} left
+*/
+/**
+* @typedef CanvasSceneMouseProperties
+* @property {number} x
+* @property {number} y
+* @property {number} velocityX
+* @property {number} velocityY
+* @property {number} lastTimeStamp
+* @property {number} wheelDirection
+* @property {boolean} isInWindow
+* @property {CanvasSceneMouseButtons} buttons
+*/
 
 export class CanvasScene {
 
@@ -11,6 +38,8 @@ export class CanvasScene {
      * @param {number} width
      * @param {number} height
      * @param {HTMLElement} domElement
+     * @example
+     * new CanvasScene(520, 840, document.body);
      */
     constructor(width, height, domElement) {
 
@@ -245,10 +274,16 @@ export class CanvasScene {
 
     }
     /**
+     * @callback eventCallback
+     * @param {CanvasSceneMouseProperties} mouse
+     * @param {CanvasScene} self
+     */
+
+    /**
      * Event listener.
      * @param {"sceneResize" | "mouseDown" | "mouseUp" | "mouseMove" | "mouseOut" | "mouseEnter" | "mouseWheel"} event
-     * @param {Function} callback
-     */
+     * @param {eventCallback} callback
+    */
     On(event, callback) {
 
         let possibleEvents = ["sceneResize", "mouseDown", "mouseUp", "mouseMove", "mouseOut", "mouseEnter", "mouseWheel"],
@@ -283,6 +318,13 @@ export class Renderer {
 
     /**@type {Camera} */
     camera;
+
+    /**@type {number} */
+    visibleObjects;
+
+    /**
+     * @typedef {Object} RendererAttributes
+     */
 
     /**
      * Creates a new canvas2d renderings context.
@@ -357,11 +399,13 @@ export class Renderer {
         return this;
     }
     /**Renders all objects added to this renderer. */
-    RenderAllObjects() {
+    RenderAllObjects(deltaTime) {
 
         const ctx = this.ctx;
 
         if (this.camera instanceof Camera) {
+
+            // Handle camera events.
 
             ctx.save();
 
@@ -377,10 +421,11 @@ export class Renderer {
                 );
             }
 
-            ctx.translate(-this.camera.x, -this.camera.y);
+            ctx.translate(this.camera.x, this.camera.y);
             ctx.scale(this.camera.scaleX, this.camera.scaleY);
 
-            let i = 0;
+            let i = 0,
+                visibleObjects = 0;
 
             while (i < this.renderObjects.length) {
 
@@ -391,12 +436,18 @@ export class Renderer {
 
                     if (typeof object.width === "number" && typeof object.height === "number") {
 
-                        if (object.x > -((this.camera.x + 30) / this.camera.scaleX) && object.x < -((this.camera.x - this.camera.width) / this.camera.scaleX) &&
+                        if (object.x > -(((this.camera.x + 30) / this.camera.scaleX) + object.width) && object.x < -((this.camera.x - this.camera.width) / this.camera.scaleX) &&
                             object.y > -((this.camera.y + 30) / this.camera.scaleY) && object.y < -((this.camera.y - (this.camera.height))) / this.camera.scaleY) {
 
+                            visibleObjects += 1;
+
+                            object.visible = true;
 
                             if (typeof object.Draw === "function") object.Draw(this.ctx);
-
+                            if (typeof object.Update === "function") object.Update(this.ctx, deltaTime);
+                             
+                        } else {
+                            object.visible = false;
                         }
 
                     }
@@ -404,14 +455,20 @@ export class Renderer {
                 } else {
 
                     if (typeof object.Draw === "function") object.Draw(this.ctx);
+                    if (typeof object.Update === "function") object.Update(this.ctx, deltaTime);
 
                 }
+
 
                 i += 1;
             }
 
+            this.visibleObjects = visibleObjects;
+
 
             ctx.restore();
+
+            // this.RenderFilter();
 
             return this;
         } else {
@@ -437,6 +494,7 @@ export class Renderer {
                 const object = this.renderObjects[i];
 
                 if (typeof object.Draw === "function") object.Draw(this.ctx);
+                if (typeof object.Update === "function") object.Update(this.ctx, deltaTime);
 
                 i += 1;
             }
@@ -450,11 +508,11 @@ export class Renderer {
      * Renders an object in this renderer instance.
      * @param {RenderObject} renderObject
      */
-    Render(renderObject) {
+    Render(renderObject, deltaTime) {
 
         if (!(renderObject instanceof RenderObject)) {
 
-            this.RenderAllObjects();
+            this.RenderAllObjects(deltaTime);
 
             return;
         }
@@ -482,6 +540,8 @@ export class Renderer {
      * @param {RenderObject | Array<RenderObject>} renderObject
      */
     Add(renderObject) {
+
+        if (!(renderObject instanceof RenderObject) && !(renderObject instanceof Array)) throw new Error("Cannot add instance since it's not a RenderObject.")
 
         if (renderObject instanceof RenderObject) {
 
@@ -541,7 +601,6 @@ export class Renderer {
         }
 
     }
-
     /**
     * Sets a global transformation matrix.
     * @param {number} horizontalScaling Horizontal scaling. A value of '1' results in no scaling.
@@ -571,6 +630,31 @@ export class Renderer {
         }
 
         return this.globalTransformation;
+    }
+    RenderFilter() {
+
+        const ctx = this.ctx;
+
+        ctx.beginPath();
+
+        const imageData = ctx.getImageData(0, 0, this.scene.width, this.scene.height);
+
+        for (let i = 0; i < imageData.data.length; i += 4) {
+
+            const pixelData = imageData.data;
+
+            const r = pixelData[i],
+                g = pixelData[i + 1],
+                b = pixelData[i + 2],
+                a = pixelData[i + 3];
+
+            imageData.data[i] = 0;
+            imageData.data[i + 1] = 0;
+            imageData.data[i + 2] = 0;
+            imageData.data[i + 3] = a;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
     }
 }
 
@@ -645,7 +729,7 @@ export class SceneUpdater {
 
         }
 
-        if (typeof this.renderer !== "undefined") this.renderer.Render();
+        if (typeof this.renderer !== "undefined") this.renderer.Render(null, this.deltaTime);
 
         while (this.times.length > 0 && this.times[0] <= now - 1000) this.times.shift();
 
@@ -691,11 +775,11 @@ export async function WaitFor(milliseconds) {
 }
 
 // Export from other files.
-export { Rectangle } from "./shapes/rectangle.js";
-export { Circle } from "./shapes/circle.js";
+export { Rectangle } from "./graphics/rectangle.js";
+export { Circle } from "./graphics/circle.js";
 export { Color, ColorNode, LinearGradientColorNode } from "./essentials/color.js";
 export { AudioNode } from "./audio/audioNode.js";
-export { TextNode } from "./rendering/text.js";
+export { TextNode } from "./graphics/text.js";
 export { FrameCapturer } from "./rendering/canvasEncoder.js";
 export { RenderObject };
 
@@ -705,5 +789,6 @@ export { Camera } from "./rendering/camera.js";
 export { GetInputDown, GetInputUp } from "./essentials/keyboard.js";
 export { GamePad, ConnectedGamePads } from "./essentials/gamepad.js";
 export { AnimateSingleInteger } from "./essentials/animator.js";
+export { ParticleSystem } from "./graphics/particleSystem.js";
 
 export { PhysicsController } from "./controllers/physicsController.js";

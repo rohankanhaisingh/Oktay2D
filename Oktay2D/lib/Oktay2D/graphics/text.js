@@ -33,6 +33,9 @@ export class TextNode extends RenderObject {
         this.y = y;
         this.style = style;
 
+        this.width = 5;
+        this.height = 5;
+
         this.rotation = null;
         this.transformation = null;
     }

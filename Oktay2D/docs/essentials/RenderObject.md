@@ -11,14 +11,18 @@ for this class isn't really useful unless you want to call static methods.
 
 ## Properties
 
-- ``id``: Object unique id.
-- ``objectCount``: Object count, starting from zero when creating the first one.
-- ``creationTimeStamp``: Timestamp when object has been made.
+### ``id``
+Unique ID generated for each render object.
 
+### ``objectCount``
+Parallel object count. First object starts with ``0``.
+
+### ``creationTimestamp``
+Timestamp when the object has been made.
 
 ## Methods
 
-### Destroy();
+### ``Destroy();``
 
 ```ts
 void Destroy();
@@ -26,9 +30,16 @@ void Destroy();
 
 Calling the ``Destroy()`` method will destroy the created instance and removes it from the array with ``RenderObject`` instances in it.
 
+## Static properties
+
+### ``AddToGlobalArray``
+Boolean which will add every created ``RenderObject`` instance to an array (``RenderObjects``) if this property is set to ``true``.
+
+Default is ``true``.
+
 ## Static methods.
 
-### GetAllRenderObjects();
+### ``GetAllRenderObjects();``
 
 ```ts
 Array: GetAllRenderObjects();
@@ -36,7 +47,7 @@ Array: GetAllRenderObjects();
 
 Will return an array with all the ``RenderObject`` instances in it.
 
-### RenderAllObjects();
+### ``RenderAllObjects();``
 
 ```ts
 void RenderAllObjects();

@@ -1,3 +1,5 @@
+import "../libs/whammyjs/WhammyJS.min.js";
+
 import { CanvasScene } from "../index.js";
 
 /**

@@ -9,7 +9,7 @@ export class Circle extends RenderObject {
      * @param {number} radius The arc's radius. Must be positive.
      * @param {number | null} startAngle The angle at which the arc starts in radians, measured from the positive x-axis.
      * @param {number | null} endAngle The angle at which the arc ends in radians, measured from the positive x-axis.
-     * @param {object} style Rectangle style.
+     * @param {object} style Circle styles.
      *
      * @param style.backgroundColor {string | ColorNode}
      * @param style.borderColor {string}

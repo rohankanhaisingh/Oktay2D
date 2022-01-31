@@ -1,0 +1,20 @@
+{
+  "name": "oktay2d",
+  "version": "1.0.0",
+  "description": "A web-graphics 2D engine.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "graphics",
+    "2D",
+    "web",
+    "webgraphics"
+  ],
+  "author": "Babah Gee",
+  "license": "MIT",
+  "dependencies": {
+    "sat": "^0.9.0"
+  }
+}

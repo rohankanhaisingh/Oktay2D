@@ -1,3 +1,4 @@
+import { CanvasScene } from "../index.js";
 import { generateUniqueID } from "./generateUniqueId.js";
 
 export const RenderObjects = new Array();
@@ -19,11 +20,21 @@ export class RenderObject {
     /**@type {number} */
     height;
 
+    /**@type {number} */
+    radius;
+
+    /**@type {boolean} */
+    visible;
+
     constructor() {
 
         this.id = generateUniqueID(18).id;
         this.objectCount = ObjectCount;
         this.creationTimeStamp = Date.now();
+
+        this.events = {};
+
+        this.visible = true;
 
         ObjectCount += 1;
 
@@ -48,6 +59,37 @@ export class RenderObject {
             i += 1;
         }
 
+    }
+    /**
+     * Event listener on 
+     * @param {"click"} event
+     * @param {Function} callback
+     * @param {any | CanvasScene} arg
+     */
+    On(event, callback, arg) {
+
+        if (typeof event !== "string") throw new Error("The given argument (as event) is not a event.");
+
+        switch (event) {
+            case "click":
+
+                if (!(arg instanceof CanvasScene)) throw new Error(`A CanvasScene instance has not been specified as third argument. Please specify one.`);
+
+                if (typeof callback !== "function") throw new Error("The given argument (as callback) is not a function.");
+
+                this.events["click"] = callback;
+
+                arg.On("mouseDown", (mouse, self) => {
+
+                    // if(typeof this.events["click"])
+
+                });
+
+                break;
+            default:
+                throw new Error(`The given event name '${event}' is not a recognizable event for this instance.`);
+                break;
+        }
     }
 
 

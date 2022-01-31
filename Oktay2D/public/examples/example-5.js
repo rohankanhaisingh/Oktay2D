@@ -34,16 +34,26 @@ const infoText = new Oktay2D.TextNode("Click somewhere in the scene to change th
 	shadowColor: "rgba(0, 0, 0, .1)"
 }), // Info text node.
 	toast = new Oktay2D.Rectangle(scene.width / 2, 60, 1, 0, {
-	backgroundImage: document.querySelector(".zamn"),
-	shadowOffsetX: -30,
-	shadowOffsetY: 30,
-	shadowBlur: 10,
-	glowStrength: 10,
-	shadowColor: "rgba(0, 0, 0, .1)"
-}); // Toast
+		backgroundImage: document.querySelector(".zamn"),
+		shadowOffsetX: -30,
+		shadowOffsetY: 30,
+		shadowBlur: 10,
+		glowStrength: 10,
+		shadowColor: "rgba(0, 0, 0, .1)"
+	}), // Toast.
+	epicCircle = new Oktay2D.Circle(scene.width / 4, scene.height / 4, 100, 0, 2 * Math.PI, {
+		borderColor: Oktay2D.Color.Random("rgb"),
+		borderWidth: 10,
+		shadowOffsetX: -30,
+		shadowOffsetY: 30,
+		shadowBlur: 10,
+		glowStrength: 10,
+		shadowColor: "rgba(0, 0, 0, .1)"
+	});
+	
 
 // Add the two graphical objects to the renderer.
-renderer.Add([infoText, toast]);
+renderer.Add([infoText, toast, epicCircle]);
 
 
 function startAnimation() {
@@ -68,6 +78,25 @@ function startAnimation() {
 
 	});
 
+	setInterval(function () {
+
+		Oktay2D.AnimateSingleInteger(0, 360, 2000, "easeInOutExpo", function (startAngle) {
+
+			epicCircle.startAngle = startAngle / 180 * Math.PI;
+
+		});
+
+		setTimeout(function () {
+
+			Oktay2D.AnimateSingleInteger(0, 360, 2000, "easeInOutExpo", function (endAngle) {
+
+				epicCircle.endAngle = endAngle / 180 * Math.PI;
+
+			});
+
+		}, 500);
+
+	}, 2000);
 
 	// Animate each 6 seconds.
 	setInterval(function () {

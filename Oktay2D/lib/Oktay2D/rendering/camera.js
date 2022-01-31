@@ -52,6 +52,11 @@ export class Camera {
         this.width = scene.width;
         this.height = scene.height;
 
+        this.lastCamaraOffset = {
+            x: 0,
+            y: 0
+        }
+
         // Coordinates.
         this.x = 0;
         this.y = 0;
@@ -63,6 +68,8 @@ export class Camera {
         this.rotation = 0;
 
         this.offscreenRendering = true;
+
+        this.events = {};
 
         renderer.camera = this;
     }
@@ -85,5 +92,67 @@ export class Camera {
 
         ctx.closePath();
         ctx.restore()
+    }
+    /**
+     * Create an event listener.
+     * @param {"move"} event
+     * @param {Function} callback
+     */
+    On(event, callback) {
+
+        if (typeof event !== "string") throw new Error("The given argument (as event) is not a string.");
+
+        switch (event) {
+
+            case "move":
+
+                if (typeof callback !== "function") throw new Error("The given argument (as callback) is not a function.");
+
+                this.events["onMove"] = callback;
+
+                return this;
+
+                break;
+
+        }
+
+    }
+    /**
+     * Adds a direction to the current coordinates.
+     * @param {number | null} x
+     * @param {number | null} y
+     * @returns {Camera}
+     */
+    AddDirection(x, y) {
+
+        if (typeof this.x === "number") {
+
+            this.lastCamaraOffset.x = this.x;
+
+            this.x -= x;
+        }
+        if (typeof this.y === "number") {
+
+            this.lastCamaraOffset.y = this.y;
+
+            this.x -= y;
+        }
+
+    }
+    Set(x, y) {
+
+        if (typeof this.x === "number") {
+
+            this.lastCamaraOffset.x = this.x;
+
+            this.x = -x;
+        }
+        if (typeof this.y === "number") {
+
+            this.lastCamaraOffset.y = this.y;
+
+            this.x = -y;
+        }
+
     }
 }

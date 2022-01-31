@@ -33,6 +33,31 @@ export class Color {
         this.creationTimeStamp = Date.now();
         this.type = "color";
     }
+    /**
+     * Generates a random color.
+     * @param {"rgb" | "rgba" | "hex" | "hsl" | "hsla"} type
+     */
+    static Random(type) {
+
+        switch (type) {
+
+            case "rgb":
+
+                const red = Math.floor(Math.random() * 256),
+                    green = Math.floor(Math.random() * 256),
+                    blue = Math.floor(Math.random() * 256);
+
+                return `rgb(${red}, ${green}, ${blue})`;
+
+                break;
+
+
+            default:
+                throw new Error(`The given argument as (type) is not a recognized color type. Given argument: ${type}`);
+                break;
+        }
+
+    }
 }
 
 export class ColorNode extends Color {
@@ -65,31 +90,6 @@ export class ColorNode extends Color {
         this.red = hexToRgb(this.hex)[0];
         this.green = hexToRgb(this.hex)[1];
         this.blue = hexToRgb(this.hex)[2];
-    }
-    /**
-     * Generates a random color.
-     * @param {"rgb" | "rgba" | "hex" | "hsl" | "hsla"} type
-     */
-    static Random(type) {
-
-        switch (type) {
-
-            case "rgb":
-
-                const red = Math.floor(Math.random() * 256),
-                    green = Math.floor(Math.random() * 256),
-                    blue = Math.floor(Math.random() * 256);
-
-                return `rgb(${red}, ${green}, ${blue})`;
-
-                break;
-
-
-            default:
-                throw new Error(`The given argument as (type) is not a recognized color type. Given argument: ${type}`);
-                break;
-        }
-
     }
 }
 

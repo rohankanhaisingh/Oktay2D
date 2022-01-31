@@ -19,6 +19,7 @@ window.addEventListener("keyup", function (event) {
 
 /**
  * Listen for any keyboard input down events.
+ *
  * @param {string} key
  * @param {Function} callback
  */
