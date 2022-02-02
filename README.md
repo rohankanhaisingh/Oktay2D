@@ -1,4 +1,4 @@
-@[Oktay2D Icon](https://cdn.discordapp.com/attachments/392676649365274629/938402950827638794/Oktay2D_Logo.png)
+![Oktay2D Icon](https://cdn.discordapp.com/attachments/392676649365274629/938402950827638794/Oktay2D_Logo.png)
 
 # Oktay2D
 
