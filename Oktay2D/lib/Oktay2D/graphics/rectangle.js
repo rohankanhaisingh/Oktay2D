@@ -1,5 +1,6 @@
 import { Color, ColorNode } from "../essentials/color.js";
 import { RenderObject } from "../essentials/renderobject.js";
+import { SpritesheetAnimationController, SpritesheetAnimator } from "../essentials/spritesheet.js";
 
 export class Rectangle extends RenderObject {
     /**
@@ -36,7 +37,7 @@ export class Rectangle extends RenderObject {
         this.rotation = null;
         this.transformation = null;
 
-        this.style = style;
+        this.style = { ...style };
     }
     /**
      * Draws a rectangle.
@@ -47,10 +48,11 @@ export class Rectangle extends RenderObject {
         ctx.save();
         ctx.beginPath();
 
+        // =========== Positioning ===========
         ctx.translate(this.x, this.y);
 
+        // =========== Transformation ===========
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
-
 
         if (this.transformation !== null) {
 
@@ -64,12 +66,13 @@ export class Rectangle extends RenderObject {
             );
         }
 
+        // =========== Overlay filters ===========
         if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
-
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
-
         ctx.globalCompositeOperation = typeof this.style.globalCompositeOperation === "string" ? this.style.globalCompositeOperation : null;
 
+        // =========== Styles ===========
+            
         // Background color
         if (this.style.backgroundColor instanceof Color) ctx.fillStyle = typeof this.style.backgroundColor.hex !== null ? this.style.backgroundColor.hex : "transparent";
         else ctx.fillStyle = typeof this.style.backgroundColor === "string" ? this.style.backgroundColor : "transparent";
@@ -92,11 +95,41 @@ export class Rectangle extends RenderObject {
         if (this.style.shadowColor instanceof Color) ctx.shadowColor = typeof this.style.shadowColor.hex !== null ? this.style.shadowColor.hex : null;
         else ctx.shadowColor = typeof this.style.shadowColor === "string" ? this.style.shadowColor : null;
 
+
+
+        // =========== Drawing logic ===========
         if (typeof this.style.backgroundImage !== "undefined" && (this.style.backgroundImage instanceof Image || this.style.backgroundImage instanceof HTMLVideoElement)) {
 
+            // Draw provited image.
+            
             ctx.drawImage(this.style.backgroundImage, 0, 0, this.width, this.height);
-            //ctx.drawImage(this.style.backgroundImage, this.x, this.y, this.width, this.height);
 
+        } else if (this.style.backgroundImage instanceof SpritesheetAnimationController ) {
+
+            let tick = this.style.backgroundImage.tick,
+                maxTick = this.style.backgroundImage.frameRate * deltaTime,
+                frame = this.style.backgroundImage.frame,
+                maxFrame = this.style.backgroundImage.maxFrames - 1;
+
+            if (typeof this.style.backgroundImage.frames[frame] !== "undefined") {
+                ctx.drawImage(this.style.backgroundImage.frames[frame], 0, 0, this.width, this.height)
+            }
+
+
+            if (tick * deltaTime < maxTick) {
+                this.style.backgroundImage.tick += 1;
+            } else {
+
+
+                if (frame < maxFrame) {
+                    this.style.backgroundImage.frame += 1;
+                } else {
+                    this.style.backgroundImage.frame = 0;
+                }
+
+
+                this.style.backgroundImage.tick = 0;
+            }
 
         } else {
 

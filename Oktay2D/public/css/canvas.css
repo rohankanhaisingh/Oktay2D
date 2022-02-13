@@ -17,3 +17,35 @@ img, video {
     background: #000;
     display: none;
 }
+
+audio, video {
+    display: none !important;
+}
+
+body {
+    overflow: hidden;
+}
+
+.gui-container {
+    width: 240px;
+    height: 320px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 5px;
+    background: #1d1d1d;
+    z-index: 5;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.gui-item {
+    width: calc(100% - 40px );
+    height: auto;
+    min-height: 20px;
+    padding: 10px 20px;
+    font-family: 'Cascadia Code', Consolas, monospace;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+}

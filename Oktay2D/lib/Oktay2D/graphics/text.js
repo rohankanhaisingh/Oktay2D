@@ -21,6 +21,7 @@ export class TextNode extends RenderObject {
      * @param style.shadowOffsetX {number}
      * @param style.shadowOffsetY {number}
      * @param style.strokeColor {string}
+     * @param style.strokeWidth {number}
      */
     constructor(text, x, y, style) {
         super();
@@ -80,9 +81,11 @@ export class TextNode extends RenderObject {
         ctx.textAlign = typeof this.style.textAlign === "string" ? this.style.textAlign : "start";
         ctx.textBaseline = typeof this.style.textBaseline === "string" ? this.style.textBaseline : "alphabetic";
 
+        ctx.lineWidth = typeof this.style.strokeWidth === "number" ? this.style.strokeWidth : 1;
+
         if (this.style.textColor instanceof Color) ctx.fillStyle = typeof this.style.textColor.hex !== null ? this.style.textColor.hex : "transparent";
         else ctx.fillStyle = typeof this.style.textColor === "string" ? this.style.textColor : "black";
-
+        
         if (this.style.strokeColor instanceof Color) ctx.strokeStyle = typeof this.style.strokeColor.hex !== null ? this.style.strokeColor.hex : "transparent";
         else ctx.strokeStyle = typeof this.style.strokeColor === "string" ? this.style.strokeColor : "black";
 

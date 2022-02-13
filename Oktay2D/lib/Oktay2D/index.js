@@ -3,7 +3,7 @@
  *  
  *  A graphics library for the web made by Babah Gee.
  * 
- * 
+ *  Version 1.0.0 - Last edited: 10-02-2022
  */
 
 import { generateUniqueID } from "./essentials/generateUniqueId.js";
@@ -774,21 +774,32 @@ export async function WaitFor(milliseconds) {
     });
 }
 
-// Export from other files.
-export { Rectangle } from "./graphics/rectangle.js";
-export { Circle } from "./graphics/circle.js";
-export { Color, ColorNode, LinearGradientColorNode } from "./essentials/color.js";
-export { AudioNode } from "./audio/audioNode.js";
-export { TextNode } from "./graphics/text.js";
-export { FrameCapturer } from "./rendering/canvasEncoder.js";
-export { RenderObject };
 
-export { generateUniqueID };
-export * as Math from "./essentials/math.js";
+// Exporting rendering things.
 export { Camera } from "./rendering/camera.js";
-export { GetInputDown, GetInputUp } from "./essentials/keyboard.js";
+export { FrameCapturer } from "./rendering/canvasEncoder.js";
+
+// Export audio things.
+export { AudioNode } from "./audio/audioNode.js";
+export { DynamicAudioController } from "./audio/dynamicAudio.js";
+
+// Exporting essentials.
+export { Color, ColorNode, LinearGradientColorNode } from "./essentials/color.js";
+export * as Math from "./essentials/math.js";
+export { GetInputDown, GetInputUp, keyCodes, activeKeys } from "./essentials/keyboard.js";
 export { GamePad, ConnectedGamePads } from "./essentials/gamepad.js";
 export { AnimateSingleInteger } from "./essentials/animator.js";
-export { ParticleSystem } from "./graphics/particleSystem.js";
+export { CutImageToSprites, SpritesheetAnimator } from "./essentials/spritesheet.js";
 
+// Exporting graphical elements.
+export { Rectangle } from "./graphics/rectangle.js";
+export { Circle } from "./graphics/circle.js";
+export { TextNode } from "./graphics/text.js";
+export { ParticleSystem } from "./graphics/particleSystem.js";
+export { Line, QuadraticCurve } from "./graphics/line.js";
+
+// Exporting controllers.
 export { PhysicsController } from "./controllers/physicsController.js";
+
+// Export... uhh... idfk what type of things these are.
+export { RenderObject, generateUniqueID };

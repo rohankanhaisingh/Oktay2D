@@ -44,6 +44,7 @@
     <Content Include="docs\SceneUpdater.md" />
     <Content Include="docs\Graphic\Rectangle.md" />
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
+    <Content Include="lib\Oktay2D\audio\dynamicAudio.js" />
     <Content Include="lib\Oktay2D\essentials\animator.js" />
     <Content Include="lib\Oktay2D\essentials\color.js" />
     <Content Include="lib\Oktay2D\essentials\gamepad.js" />
@@ -51,6 +52,8 @@
     <Content Include="lib\Oktay2D\essentials\keyboard.js" />
     <Content Include="lib\Oktay2D\essentials\math.js" />
     <Content Include="lib\Oktay2D\essentials\renderobject.js" />
+    <Content Include="lib\Oktay2D\essentials\spritesheet.js" />
+    <Content Include="lib\Oktay2D\graphics\line.js" />
     <Content Include="lib\Oktay2D\graphics\particleSystem.js" />
     <Content Include="lib\Oktay2D\index.js" />
     <Content Include="lib\Oktay2D\controllers\physicsController.js" />
@@ -78,6 +81,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="public\css\canvas.css" />
+    <Content Include="public\examples\example-10.js" />
     <Content Include="public\examples\example-2.js" />
     <Content Include="public\examples\example-3.js" />
     <Content Include="public\examples\example-4.js" />
@@ -85,10 +89,20 @@
     <Content Include="public\examples\example-6.js" />
     <Content Include="public\examples\example-7.js" />
     <Content Include="public\examples\example-8.js" />
+    <Content Include="public\examples\example-9.js" />
+    <Content Include="public\examples\songs\song-spectrum-01.js" />
     <Content Include="public\index.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="public\examples\example-1.js" />
+    <Content Include="public\resources\audio\big fart.mp3" />
+    <Content Include="public\resources\audio\e.wav" />
+    <Content Include="public\resources\audio\Piano Riff - fart ringtone.mp3" />
+    <Content Include="public\resources\fire_particle.png" />
+    <Content Include="public\resources\oktay2d_logo.png" />
+    <Content Include="public\resources\spritesheet-attack-01.png" />
+    <Content Include="public\resources\spritesheet-running-01.png" />
+    <Content Include="public\resources\topdown_road.jpg" />
     <Content Include="public\resources\particle_cloud.png" />
     <Content Include="README.md" />
   </ItemGroup>
@@ -117,7 +131,9 @@
     <Folder Include="public\" />
     <Folder Include="public\examples\" />
     <Folder Include="public\css\" />
+    <Folder Include="public\examples\songs\" />
     <Folder Include="public\resources\" />
+    <Folder Include="public\resources\audio\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
 </Project>

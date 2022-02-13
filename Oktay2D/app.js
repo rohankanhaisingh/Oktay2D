@@ -21,6 +21,7 @@ app.once("ready", function (ElectronApplicationReadyState) {
         minHeight: 840,
         backgroundColor: "#fff",
         title: "Oktay2D",
+        icon: path.join(__dirname, "public", "resources", "oktay2d_logo.png"),
         autoHideMenuBar: true,
         webPreferences: {
             contextIsolation: false,

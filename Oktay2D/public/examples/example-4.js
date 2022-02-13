@@ -13,7 +13,6 @@ scene.SetSize(window.innerWidth, window.innerHeight);
 scene.SetAttribute("fitToScreen");
 scene.SetAttribute("disableContextMenu");
 
-scene.canvas.style.background = "rgb(21 27 26)";
 
 const renderer = new Oktay2D.Renderer(scene, { willReadFrequently: true }),
 	updater = new Oktay2D.SceneUpdater(renderer),

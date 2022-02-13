@@ -33,27 +33,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            overflow: hidden;
-        }
-
-        .gui.overlay-gui {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 99999;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .gui-fpsmeter {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            font-family: 'Cascadia Code', Consolas, monospace;
-            color: red;
-            font-size: 12px;
-        }
 
         @-webkit-keyframes shake {
             0% {
@@ -121,6 +100,8 @@
 </head>
 <body>
 
+   
+
     <!--
         
         This document is a default document to use the library. You can change it's path to see different examples.
@@ -130,10 +111,29 @@
 
     -->
 
-    <div class="gui overlay-gui">
-        
-        <!-- FPS meter -->
-        <div class="gui-fpsmeter">0fps</div>
+    <!-- SVG filters-->
+    <svg xmlns="http://www.w3.org/2000/svg" class="svg-filter filter-01" width="10" height="10">
+        <filter id="turbulence">
+            <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
+            <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+
+    <!-- GUI container -->
+    <div class="gui-container">
+
+        <!-- Scene framerate -->
+        <div class="gui-item gui-fps">Framerate: 0</div>
+
+        <!-- Camera position (normal) -->
+        <div class="gui-item gui-campos">Camera position: 0</div>
+
+        <!-- Camera position (center) -->
+        <div class="gui-item gui-campos_center">Camera position (center): 0</div>
+
+        <!-- Mouse position -->
+        <div class="gui-item gui-mouse_pos">Mouse position: 0</div>
     </div>
 
     <!--Public images -->
@@ -153,15 +153,38 @@
         <!-- Cloud particle -->
         <img src="./resources/particle_cloud.png" alt="Cloud particle" class="particle-cloud" />
 
+        <!-- Fire particle -->
+        <img src="./resources/fire_particle.png" alt="Fire particle" class="particle-fire" />
+
         <!-- Top down road image -->
         <img src="https://3.bp.blogspot.com/-AdHChmLrCJM/VYyDTSMkUfI/AAAAAAAACHg/2ZgT6UWs94I/s1600/paper2dBackground.jpg" alt="Topdown road" class="road" />
+
+        <!-- Obunga spritesheet -->
+        <img src="resources/spritesheet-attack-01.png" alt="Obunga test sprite sheet" class="obunga-sprite" />
+        <img src="resources/spritesheet-running-01.png" alt="Obunga test sprite sheet" class="obunga-running-sprite" />
     </div>
    
+    <!-- Public audio/video media -->
+    <div class="public-av_media usable-example">
+
+        <audio class="media-song-01">
+            <source src="https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3" type="audio/mp3" />
+            <source src=".ogg" type="audio/ogg" />
+        </audio>
+
+        <video loop muted autoplay class="media-video-01">
+            <source src="resources/pexels-rostislav-uzunov-7385122.mp4" type="video/mp4" />
+            <source src="file.webm" type="video/webm" />
+            <source src="file.ogv" type="video/ogg" />
+        </video>
+
+    </div>
+
 
     <!-- Unused SAT.js library. Already been imported in the library -->
     <!--<script src="../lib/Oktay2D/libs/sat-js-0.9.0/SAT.js"></script>-->
 
     <!-- Change the source path to see different examples. See directory 'public/examples' for all the available examples.-->
-    <script type="module" src="examples/example-7.js" defer></script>
+    <script type="module" src="examples/example-10.js" defer></script>
 </body>
 </html>
