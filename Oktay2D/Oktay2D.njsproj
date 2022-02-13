@@ -30,6 +30,9 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="docs\Audio\AudioNode.md" />
+    <Content Include="docs\Audio\DynamicAudioController.md" />
+    <Content Include="docs\Audio\DynamicMediaElementTrack.md" />
+    <Content Include="docs\Audio\ElementTrack.md" />
     <Content Include="docs\CanvasScene.md" />
     <Content Include="docs\Essentials\GenerateUniqueId.md" />
     <Content Include="docs\Essentials\Keyboard.md" />
@@ -38,11 +41,11 @@
     <Content Include="docs\Essentials\Maths\PolarDirection.md" />
     <Content Include="docs\Essentials\Maths\RandomBetween.md" />
     <Content Include="docs\Essentials\Maths\README.md" />
-    <Content Include="docs\Essentials\RenderObject.md" />
-    <Content Include="docs\Graphic\TextNode.md" />
+    <Content Include="docs\Graphics\RenderObject.md" />
+    <Content Include="docs\Graphics\TextNode.md" />
     <Content Include="docs\Renderer.md" />
     <Content Include="docs\SceneUpdater.md" />
-    <Content Include="docs\Graphic\Rectangle.md" />
+    <Content Include="docs\Graphics\Rectangle.md" />
     <Content Include="lib\Oktay2D\audio\audioNode.js" />
     <Content Include="lib\Oktay2D\audio\dynamicAudio.js" />
     <Content Include="lib\Oktay2D\essentials\animator.js" />
@@ -110,7 +113,7 @@
     <Folder Include="docs\Essentials\" />
     <Folder Include="docs\Audio\" />
     <Folder Include="docs\Essentials\Maths\" />
-    <Folder Include="docs\Graphic\" />
+    <Folder Include="docs\Graphics\" />
     <Folder Include="lib\" />
     <Folder Include="lib\Oktay2D\controllers\" />
     <Folder Include="lib\Oktay2D\libs\" />

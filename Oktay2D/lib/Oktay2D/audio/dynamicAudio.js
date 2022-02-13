@@ -258,8 +258,6 @@ export class DynamicAudioController {
         this.renderObject = renderObject;
         this.options = { ...options };
 
-        this.useCameraCenter = true;
-
         this.ctx = new (window.AudioContext || window.webkitAudioContext);
 
         this.gain = this.ctx.createGain();
