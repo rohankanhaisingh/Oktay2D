@@ -100,24 +100,34 @@
 </head>
 <body>
 
-   
+
 
     <!--
-        
+
         This document is a default document to use the library. You can change it's path to see different examples.
 
         To see which examples are available, see the folder 'examples'.
 
 
     -->
-
     <!-- SVG filters-->
     <svg xmlns="http://www.w3.org/2000/svg" class="svg-filter filter-01" width="10" height="10">
         <filter id="turbulence">
             <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
             <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G" />
         </filter>
+        <filter id="brightness_threshold">
+            <feComponentTransfer>
+                <feFuncR type="linear" slope="1.5" intercept="-0.3" />
+                <feFuncG type="linear" slope="1.5" intercept="-0.3" />
+                <feFuncB type="linear" slope="1.5" intercept="-0.3" />
+            </feComponentTransfer>
+        </filter>
+        <filter id="gaussianBlur1">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+        </filter>
     </svg>
+
 
 
     <!-- GUI container -->
@@ -143,7 +153,6 @@
             These dom elements can be used in as 'backgroundImage' in rectangles.
             Use the regular in-build 'document.querySelector' method to use it. Images will automatically fit to the size of the graphic element.
         -->
-
         <!-- Topview skybox texture.-->
         <img src="https://c1.wallpaperflare.com/preview/1023/340/990/sky-clouds-cloudy-sky-landscape.jpg" alt="Sky" class="sky-topdown" />
 
@@ -159,15 +168,16 @@
         <!-- Top down road image -->
         <img src="https://3.bp.blogspot.com/-AdHChmLrCJM/VYyDTSMkUfI/AAAAAAAACHg/2ZgT6UWs94I/s1600/paper2dBackground.jpg" alt="Topdown road" class="road" />
 
-        <!-- Obunga spritesheet -->
+        <!-- Spritesheet -->
         <img src="resources/spritesheet-attack-01.png" alt="Obunga test sprite sheet" class="obunga-sprite" />
         <img src="resources/spritesheet-running-01.png" alt="Obunga test sprite sheet" class="obunga-running-sprite" />
+        <img src="resources/915953168.png" alt="Star spritesheet" class="spritesheet-star" />
     </div>
-   
+
     <!-- Public audio/video media -->
     <div class="public-av_media usable-example">
 
-        <audio class="media-song-01">
+        <!--<audio class="media-song-01">
             <source src="https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3" type="audio/mp3" />
             <source src=".ogg" type="audio/ogg" />
         </audio>
@@ -176,15 +186,14 @@
             <source src="resources/pexels-rostislav-uzunov-7385122.mp4" type="video/mp4" />
             <source src="file.webm" type="video/webm" />
             <source src="file.ogv" type="video/ogg" />
-        </video>
+        </video>-->
 
     </div>
 
 
     <!-- Unused SAT.js library. Already been imported in the library -->
     <!--<script src="../lib/Oktay2D/libs/sat-js-0.9.0/SAT.js"></script>-->
-
     <!-- Change the source path to see different examples. See directory 'public/examples' for all the available examples.-->
-    <script type="module" src="examples/example-10.js" defer></script>
+    <script type="module" src="examples/example-12.js" defer></script>
 </body>
 </html>

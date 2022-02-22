@@ -1,14 +1,39 @@
 import { Rectangle } from "../graphics/rectangle.js";
+import { WaitFor } from "../index.js";
+import { log } from "./debugger.js";
 import { generateUniqueID } from "./generateUniqueId.js";
 import { RenderObject } from "./renderobject.js";
 
 /**
- * @global
  * @typedef CutFramesDefinition
  * @property {Array<Array<HTMLImageElement>>} frames
  * @property {number} frameWidth
  * @property {number} frameHeight
  */
+
+/**
+ * @typedef CutEntireImageToSpritesOptionsDefinitions
+ * @property {number} cutInterval
+ * @property {boolean} useLogger
+ */
+
+/**
+ * Callback when progress has been made.
+ *
+ * @callback CutOnProgressCallback
+ * @param {number} estimatedTime Estimated time.
+ * @param {number} loadedFrames Loaded and cut frames
+ * @param {string} loadFramesInPercentage Loaded and cut frames but in percentage.
+ */
+
+/**
+ * @typedef CutEntireImageToSpritesResponse
+ * @property {number} frames 
+ * @property {number} framesLength 
+ * @property {{width: {number}, height: {number}}} frameDimension 
+ */
+
+
 
 /**
  * Cut the given spritesheet image into seperate images.
@@ -115,6 +140,170 @@ export async function CutImageToSprites(image, horizontalFrames, verticalFrames)
 
 }
 
+/**
+ * Cut an entire image into seperate frames.
+ * @param {HTMLImageElement} image Provided spritesheet image you'd like to cut.
+ * @param {number} horizontalFrames Length of horizontal frames.
+ * @param {number} verticalFrames Length of vertical frames.
+ * @param {CutEntireImageToSpritesOptionsDefinitions | null} options Function methods.
+ * @param {CutOnProgressCallback | null} onProgressCallback
+ * @returns {CutEntireImageToSpritesResponse}
+ */
+export async function CutEntireImageToSprites(image, horizontalFrames, verticalFrames, options, onProgressCallback) {
+
+    if (!(image instanceof HTMLImageElement)) throw new Error("The given argument (as image) is not a HTMLImage element.");
+    if (typeof horizontalFrames !== "number") throw new Error("The given argument (as horizontalFrames) has not been specified as a number.");
+    if (typeof verticalFrames !== "number") throw new Error("The given argument (as verticalFrames) has not been specified as a number.");
+
+    // ========= Definitions =========
+
+    const _options = { ...options }, // Create an empty object and add all existing properties from the 'options' argument object into this one.
+        cutFrames = new Array(), // Create a new empty array.
+        imageWidth = image.width, // Defined image width.
+        imageHeight = image.height, // Define image height.
+        frameWidth = imageWidth / horizontalFrames, // Calculate frame width.
+        frameHeight = imageHeight / verticalFrames, // Calculate frame height.
+        maxFrames = horizontalFrames * verticalFrames, // Calculate max amount of frames.
+        start = Date.now(); // Define process start time.
+
+    if (_options.useLogger) log("Image Frame Cutter", `Resolved image data: \n
+    imageWidth: ${imageWidth}
+    imageHeight: ${imageHeight}
+    frameWidth: ${frameWidth}
+    frameHeight: ${frameHeight}
+    maxFrames: ${maxFrames}
+    `);
+   
+    if (_options.useLogger) log("Image Frame Cutter", "Cutting spritesheet...");
+
+
+
+    // ========= Intialization process =========
+
+    // Create a temporary canvas and context to draw the image on.
+    let mainCanvas = document.createElement("canvas"),
+        ctx = mainCanvas.getContext("2d", {willReadFrequently: true});
+
+    // Throw error if context cannot be initialized.
+    if (ctx === null) throw new Error("Failed to cut entire image to sprites since the CanvasRenderingsContext2D cannot be initialized.");
+
+
+    // Set important attributes to canvas.
+    mainCanvas.classList.add("spritesheet-cutter-canvas", "hidden");
+    mainCanvas.style = "display: none !important; opacity: 0 !important; visibility: hidden !important";
+
+    // Set canvas dimension to the image size.
+    mainCanvas.width = imageWidth;
+    mainCanvas.height = imageHeight;
+
+
+
+    // ========= Pre drawing process =========
+
+    // Save the current canvas state.
+    ctx.beginPath();
+
+    // Draw the image.
+    ctx.drawImage(image, 0, 0, imageWidth, imageHeight);
+
+
+    document.body.appendChild(mainCanvas);
+
+    // ========= Cut process in a promise =========
+    return new Promise(async function (resolve, reject) {
+
+        function checkResult() {
+
+            if (cutFrames.length === maxFrames) resolve({
+                processDuration: Date.now() - start,
+                frames: cutFrames,
+                framesLength: cutFrames.length,
+                frameDimension: {
+                    width: frameWidth,
+                    height: frameHeight
+                }
+            });
+
+        }
+
+        // ========= Main cutting process =========
+
+        for (let x = 0; x < horizontalFrames; x++) { // Loop through horizontal frames.
+
+            for (let y = 0; y < verticalFrames; y++) { // Loop through vertical frames.
+
+                let frameCanvas = document.createElement("canvas"), // Create a temporary frame canvas.
+                    frameCtx = frameCanvas.getContext("2d", {willReadFrequently: true}), // Create a temporary canvs context.
+                    frameData = ctx.getImageData(x * frameWidth, y * frameHeight, frameWidth, frameHeight); // Get the image data from the main canvas based on the frame x and y.
+
+                if (_options.useLogger) log("Image Frame Cutter", `Gathered image data: \n
+                    Frame x: ${x};
+                    Frame y: ${y};
+                    Position: ${x * frameWidth} - ${y * frameHeight};
+                    Estimated time: ${Date.now() - start};
+                `);
+
+                // Set frame canvas attributes.
+                frameCanvas.style = "display: none !important; opacity: 0 !important; visibility: hidden !important;";
+
+                // Set dimesion to frame size.
+                frameCanvas.width = frameWidth;
+                frameCanvas.height = frameHeight;
+
+                // Save canvas drawing state.
+                frameCtx.save();
+                frameCtx.beginPath();
+
+                // Draw the gathered image data.
+                frameCtx.putImageData(ctx.getImageData(x * frameWidth, y * frameHeight, frameWidth, frameHeight), 0, 0);
+
+                // Restore previous saved canvas state.
+                frameCtx.restore();
+
+
+                // Initialize new image.
+                let frameImage = new Image();
+
+                // Convert frame canvas to image and load it into canvas.
+                frameImage.src = frameCanvas.toDataURL("image/png");
+
+                // Event when the image has been loaded, may take a while depending on the size of the image.
+                frameImage.addEventListener("load", function () {
+
+                    // Set every temporary frame variable to null to save cache memory.
+                    frameCanvas = null;
+                    frameCtx = null;
+                    frameData = null;
+
+                    // Check end result state.
+                    checkResult();
+
+                    if (typeof onProgressCallback === "function") onProgressCallback({
+                        estimatedTime: Date.now() - start,
+                        loadedFrames: cutFrames.length,
+                        loadFramesInPercentage: 100 / maxFrames * cutFrames.length
+                    });
+                });
+
+                // Already push the image to the array with cut frames.
+                cutFrames.push(frameImage);
+
+
+                if (typeof _options.cutInterval === "number") await WaitFor(typeof _options.cutInterval === "number" ? _options.cutInterval : 200);
+            }
+
+            // Wait for seconds to execute the next process operation.
+            if (typeof _options === "number") await WaitFor(typeof _options.cutInterval === "number" ? _options.cutInterval : 200);
+        }
+
+        // Set the main canvas and its context to null to save cache memory.
+        mainCanvas = null;
+        ctx = null;
+
+    });
+
+}
+
 export class SpritesheetAnimationController {
     constructor(frames, maxFrames, frameRate) {
 
@@ -125,7 +314,10 @@ export class SpritesheetAnimationController {
         this.animationID = generateUniqueID(18).id;
         this.startTimestamp = Date.now();
 
-        this.frame = 0;
+        this.frameX = 0;
+        this.frameY = 0;
+
+
         this.tick = 0;
     }
 }

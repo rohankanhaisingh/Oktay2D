@@ -1,6 +1,8 @@
 import { Color, ColorNode } from "../essentials/color.js";
+import { RandomBetween } from "../essentials/math.js";
 import { RenderObject } from "../essentials/renderobject.js";
 import { SpritesheetAnimationController, SpritesheetAnimator } from "../essentials/spritesheet.js";
+import { SVGFilter } from "../rendering/filter.js";
 
 export class Rectangle extends RenderObject {
     /**
@@ -23,6 +25,7 @@ export class Rectangle extends RenderObject {
      * @param style.opacity {number}
      * @param style.filter {string}
      * @param style.globalCompositeOperation {"source-over" | "source-in" | "source-out" | "source-atop" | "destination-over" | "destination-in" | "destination-out" | "destination-atop" | "lighter"| "copy" | "xor" | "multiply" | "screen" | "overlay" | "darken" | "lighten" | "color-dodge" | "color-burn" | "hard-light" | "soft-light" | "difference" | "exclusion" | "hue" | "saturation" | "color" | "luminosity"}
+     * @param style.imageSmoothingEnabled  {boolean"}
      */
     constructor(x, y, width, height, style) {
 
@@ -37,6 +40,9 @@ export class Rectangle extends RenderObject {
         this.rotation = null;
         this.transformation = null;
 
+        this.scaleX = 1;
+        this.scaleY = 1;
+
         this.style = { ...style };
     }
     /**
@@ -50,6 +56,7 @@ export class Rectangle extends RenderObject {
 
         // =========== Positioning ===========
         ctx.translate(this.x, this.y);
+        ctx.scale(this.scaleX, this.scaleY);
 
         // =========== Transformation ===========
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
@@ -67,9 +74,17 @@ export class Rectangle extends RenderObject {
         }
 
         // =========== Overlay filters ===========
+
         if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
+        if (typeof this.style.filter !== "undefined" && this.style.filter instanceof SVGFilter) {
+
+            ctx.filter = `url(#${this.style.filter.filterId})`;
+        }
+
+
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
         ctx.globalCompositeOperation = typeof this.style.globalCompositeOperation === "string" ? this.style.globalCompositeOperation : null;
+        ctx.imageSmoothingEnabled = typeof this.style.imageSmoothingEnabled === "boolean" ? this.style.imageSmoothingEnabled : false;
 
         // =========== Styles ===========
             
@@ -107,30 +122,37 @@ export class Rectangle extends RenderObject {
         } else if (this.style.backgroundImage instanceof SpritesheetAnimationController ) {
 
             let tick = this.style.backgroundImage.tick,
-                maxTick = this.style.backgroundImage.frameRate * deltaTime,
-                frame = this.style.backgroundImage.frame,
-                maxFrame = this.style.backgroundImage.maxFrames - 1;
+                maxTick = this.style.backgroundImage.frameRate,
+                frameX = this.style.backgroundImage.frameX;
 
-            if (typeof this.style.backgroundImage.frames[frame] !== "undefined") {
-                ctx.drawImage(this.style.backgroundImage.frames[frame], 0, 0, this.width, this.height)
-            }
-
-
-            if (tick * deltaTime < maxTick) {
+            if (tick <= maxTick) {
                 this.style.backgroundImage.tick += 1;
             } else {
 
+                if (frameX <= this.style.backgroundImage.frames.length) {
 
-                if (frame < maxFrame) {
-                    this.style.backgroundImage.frame += 1;
+                    this.style.backgroundImage.frameX += 1;
+
                 } else {
-                    this.style.backgroundImage.frame = 0;
+                    this.style.backgroundImage.frameX = 0;
                 }
-
 
                 this.style.backgroundImage.tick = 0;
             }
 
+            let frame = this.style.backgroundImage.frames[frameX];
+
+            if (typeof frame !== "undefined") {
+                ctx.beginPath();
+
+                ctx.drawImage(frame, 0, 0, this.width, this.height);
+
+                ctx.closePath();
+            } else {
+
+                this.style.backgroundImage.frameX = 0;
+                this.style.backgroundImage.tick = 0;
+            }
         } else {
 
 

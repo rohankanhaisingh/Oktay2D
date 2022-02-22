@@ -6,7 +6,9 @@
  *  Version 1.0.0 - Last edited: 10-02-2022
  */
 
+import { log } from "./essentials/debugger.js";
 import { generateUniqueID } from "./essentials/generateUniqueId.js";
+import { RandomBetween } from "./essentials/math.js";
 import { RenderObject, RenderObjects } from "./essentials/renderobject.js";
 import { Camera } from "./rendering/camera.js";
 
@@ -67,6 +69,8 @@ export class CanvasScene {
             isInWindow: false
         }
 
+        log("CanvasScene", "Initializing canvas scene...", "color: yellow");
+
         // Create the element.
         const canvas = document.createElement("canvas");
         canvas.className = "oktay2d-scene";
@@ -86,6 +90,8 @@ export class CanvasScene {
         });
 
         this.HandleEvents();
+
+        log("CanvasScene", "Succesfully initialized canvas scene.", "color: lime;")
     }
     HandleEvents() {
 
@@ -347,6 +353,7 @@ export class Renderer {
 
         this.ctx = scene.canvas.getContext("2d", attributes);
 
+        this.ctx.com
 
         this.globalTransformation = null;
 
@@ -526,7 +533,6 @@ export class Renderer {
         if (typeof renderObject.Draw === "function") renderObject.Draw(this.ctx);
 
         ctx.restore();
-
     }
     /**Clears the entire screen */
     ClearScene() {
@@ -594,6 +600,8 @@ export class Renderer {
 
                 i = this.renderObjects.length - 1;
 
+                break;
+
                 return;
             }
 
@@ -643,14 +651,16 @@ export class Renderer {
 
             const pixelData = imageData.data;
 
-            const r = pixelData[i],
+            let r = pixelData[i],
                 g = pixelData[i + 1],
                 b = pixelData[i + 2],
                 a = pixelData[i + 3];
 
-            imageData.data[i] = 0;
-            imageData.data[i + 1] = 0;
-            imageData.data[i + 2] = 0;
+            r = RandomBetween(r - 10, r + 10);
+
+            imageData.data[i] = r;
+            imageData.data[i + 1] = g;
+            imageData.data[i + 2] = b;
             imageData.data[i + 3] = a;
         }
 
@@ -789,7 +799,8 @@ export * as Math from "./essentials/math.js";
 export { GetInputDown, GetInputUp, keyCodes, activeKeys } from "./essentials/keyboard.js";
 export { GamePad, ConnectedGamePads } from "./essentials/gamepad.js";
 export { AnimateSingleInteger } from "./essentials/animator.js";
-export { CutImageToSprites, SpritesheetAnimator } from "./essentials/spritesheet.js";
+export { CutImageToSprites, SpritesheetAnimator, CutEntireImageToSprites, SpritesheetAnimationController } from "./essentials/spritesheet.js";
+export { LoadImageSync } from "./essentials/loader.js";
 
 // Exporting graphical elements.
 export { Rectangle } from "./graphics/rectangle.js";
@@ -803,3 +814,4 @@ export { PhysicsController } from "./controllers/physicsController.js";
 
 // Export... uhh... idfk what type of things these are.
 export { RenderObject, generateUniqueID };
+export * as Filters from "./rendering/filter.js";

@@ -1,0 +1,29 @@
+ref Scene : new CanvasScene with (500, 500, document.body);
+
+call Scene.SetSize with (window.innerWidth, innerHeight);
+
+call Scene.SetAttribute with "fitToScreen";
+call Scene.SetAttribute with "disableContextMenu";
+
+set $.RenderObject.AddToGlobalArray to false;
+
+ref SceneRenderer : new Renderer with Scene;
+ref SceneUpdater : new Updater with SceneRenderer;
+
+
+ref createStar : function {
+
+	ref start : call $.Date.Now;
+
+	ref sprites : call await $.CutEntireImageToSprites with ($(".spritesheet-star"), 27, 27);
+
+}
+
+
+event SceneUpdater:OnUpdate with (deltaTime) {
+	
+	call SceneRenderer.ClearScene;
+
+}
+
+call SceneUpdater.Update;
