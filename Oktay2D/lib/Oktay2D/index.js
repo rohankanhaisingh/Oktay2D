@@ -12,6 +12,42 @@ import { RandomBetween } from "./essentials/math.js";
 import { RenderObject, RenderObjects } from "./essentials/renderobject.js";
 import { Camera } from "./rendering/camera.js";
 
+export const _LIB_OPTIONS = {
+    _USABLE_FLAGS: [],
+    _USER_AGENT: navigator.userAgent,
+    _PLATFORM: typeof navigator.platform === "string" ? navigator.platform : null,
+    _POST_PROCESSING_SHADERS: ["SHADER_AMBIENT_OCCLUSION", "SHADER_BLOOM"],
+    _MODULE_LOADER: typeof require !== "undefined" ? {
+        __ELECTRON: require("electron"),
+        __JS_EASINGS: require("js-easing-functions"),
+        __SAT_PHYSICS: require("sat")
+    } : null,
+    _FILTER_USAGE: true,
+    _CHECK_FLAG_STATE: function (FLAGNAME) {
+
+        const __FEATURES = {
+            __NEW_CANVAS_API: ["roundRect", "createConicGradient", "reset"]
+        }
+
+        switch (FLAGNAME) {
+
+            case "new-canvas-2d-api":
+
+                let _IS_READY = true;
+
+                __FEATURES.__NEW_CANVAS_API.forEach(a => {
+                    if (typeof CanvasRenderingContext2D.prototype[a] === "undefined") _IS_READY = false;
+                });
+
+                return _IS_READY;
+
+                break;
+
+        }
+
+    }
+}
+
 // Type definitions 
 /**
 * @typedef CanvasSceneMouseButtons
@@ -30,6 +66,12 @@ import { Camera } from "./rendering/camera.js";
 * @property {boolean} isInWindow
 * @property {CanvasSceneMouseButtons} buttons
 */
+
+/**
+ * @typedef LinearGradientColorStopDefinitions
+ * @property {number} offset
+ * @property {string} color
+ */
 
 export class CanvasScene {
 
@@ -666,6 +708,82 @@ export class Renderer {
 
         ctx.putImageData(imageData, 0, 0);
     }
+    /**
+     * Creates a linear gradient object.
+     * @param {number} x0 The x-axis coordinate of the start point.
+     * @param {number} y0 The y-axis coordinate of the start point.
+     * @param {number} x1 The x-axis coordinate of the end point.
+     * @param {number} y1 The y-axis coordinate of the end point.
+     * @param {Array<LinearGradientColorStopDefinitions>} colorStops Color stops.
+     */
+    CreateLinearGradient(x0, y0, x1, y1, colorStops) {
+
+        if (typeof x0 !== "number") throw new Error("The x-axis coordinate of the start point has not been specified as a number.");
+        if (typeof y0 !== "number") throw new Error("The y-axis coordinate of the start point has not been specified as a number.");
+        if (typeof x1 !== "number") throw new Error("The x-axis coordinate of the end point has not been specified as a number.");
+        if (typeof y1 !== "number") throw new Error("The y-axis coordinate of the end point has not been specified as a number.");
+
+        if (!(this.ctx instanceof CanvasRenderingContext2D)) throw new Error("Failed to generate a linear gradient object since no CanvasRenderingContext2D has been defined.");
+
+        const ctx = this.ctx;
+
+        const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+
+        for (var i = 0; i < colorStops.length; i++) {
+            const stop = colorStops[i];
+
+            if (typeof stop.offset === "number" && typeof stop.color === "string") {
+                gradient.addColorStop(stop.offset, stop.color);
+            }
+        }
+
+
+        return gradient;
+    }
+    /**
+     * Creates a radial gradient using the size and coordinates of two circles.
+     * For example:
+     * 
+     * Renderer.CreateRadialGradient(50, 50, 0, 100, 100, 50);
+     * 
+     * @param {number} x0 The x-axis coordinate of the start circle.
+     * @param {number} y0 The y-axis coordinate of the start circle.
+     * @param {number} r0 The radius of the start circle. Must be non-negative and finite.
+     * @param {number} x1 The x-axis coordinate of the end circle.
+     * @param {number} y1 The y-axis coordinate of the end circle.
+     * @param {number} r1 The radius of the end circle. Must be non-negative and finite.
+     * @param {Array<LinearGradientColorStopDefinitions>} colorStops Color stops.
+     */
+    CreateRadialGradient(x0, y0, r0, x1, y1, r1, colorStops) {
+
+        if (typeof x0 !== "number") throw new Error("The x-axis coordinate of the start circle has not been specified as a number.");
+        if (typeof y0 !== "number") throw new Error("The y-axis coordinate of the start circle has not been specified as a number.");
+        if (typeof r0 !== "number") throw new Error("The radius of the start circle has not been specified as a number.");
+        if (typeof x1 !== "number") throw new Error("The x-axis coordinate of the end circle has not been specified as a number.");
+        if (typeof y1 !== "number") throw new Error("The y-axis coordinate of the end circle has not been specified as a number.");
+        if (typeof r1 !== "number") throw new Error("The radius of the end circle has not been specified as a number.");
+        
+        if (!(this.ctx instanceof CanvasRenderingContext2D)) throw new Error("Failed to generate a linear gradient object since no CanvasRenderingContext2D has been defined.");
+
+        const ctx = this.ctx;
+
+        const gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+
+        for (var i = 0; i < colorStops.length; i++) {
+            const stop = colorStops[i];
+
+            if (typeof stop.offset === "number" && typeof stop.color === "string") {
+                gradient.addColorStop(stop.offset, stop.color);
+            }
+        }
+
+
+        return gradient;
+    }
+    CreateConicGradient() {
+
+
+    }
 }
 
 export class SceneUpdater {
@@ -784,6 +902,36 @@ export async function WaitFor(milliseconds) {
     });
 }
 
+/**
+ * Allows Oktay2D to use features from different flags.
+ * @param {"new-canvas-2d-api"} flagName
+ */
+export function SetFlag(flagName) {
+
+    switch (flagName) {
+        case "new-canvas-2d-api":
+
+            if (_LIB_OPTIONS._USABLE_FLAGS.includes(flagName)) return null;
+
+            if (_LIB_OPTIONS._CHECK_FLAG_STATE(flagName)) {
+
+                _LIB_OPTIONS._USABLE_FLAGS.push(flagName);
+
+                console.warn(`Flag '${flagName}' succesfully has been set for Oktay2D. More features will be available, but be careful when using it in production.\n\nSome features may not be available: \n- 4x4 matrices.\n- CanvasFilter class.`);
+
+                return flagName;
+            } else {
+                console.warn(`Failed to set flag '${flagName}'.`);
+            }
+
+            break;
+        default:
+
+            return null;
+
+            break;
+    }
+}
 
 // Exporting rendering things.
 export { Camera } from "./rendering/camera.js";
@@ -808,6 +956,7 @@ export { Circle } from "./graphics/circle.js";
 export { TextNode } from "./graphics/text.js";
 export { ParticleSystem } from "./graphics/particleSystem.js";
 export { Line, QuadraticCurve } from "./graphics/line.js";
+export { IsoscelesTriangle } from "./graphics/traingle.js";
 
 // Exporting controllers.
 export { PhysicsController } from "./controllers/physicsController.js";

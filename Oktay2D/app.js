@@ -10,7 +10,7 @@ const { app, BrowserWindow, ipcMain } = electron;
 let mainBrowserWindow = null;
 
 
-
+app.commandLine.appendSwitch("new-canvas-2d-api", "true");
 
 app.once("ready", function (ElectronApplicationReadyState) {
 

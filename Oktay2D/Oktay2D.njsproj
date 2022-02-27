@@ -66,7 +66,9 @@
     <Content Include="lib\Oktay2D\graphics\particleSystem.js" />
     <Content Include="lib\Oktay2D\graphics\rectangle.js" />
     <Content Include="lib\Oktay2D\graphics\text.js" />
+    <Content Include="lib\Oktay2D\graphics\traingle.js" />
     <Content Include="lib\Oktay2D\index.js" />
+    <Content Include="lib\Oktay2D\index.min.js" />
     <Content Include="lib\Oktay2D\libs\sat-js-0.9.0\.gitignore" />
     <Content Include="lib\Oktay2D\libs\sat-js-0.9.0\CHANGELOG.md" />
     <Content Include="lib\Oktay2D\libs\sat-js-0.9.0\examples\dynamic_collision.html" />
@@ -120,6 +122,9 @@
     <Content Include="public\resources\spritesheet-running-01.png" />
     <Content Include="public\resources\topdown_road.jpg" />
     <Content Include="public\resources\particle_cloud.png" />
+    <Content Include="public\test\circle-test.js" />
+    <Content Include="public\test\gradient-graph.js" />
+    <Content Include="public\test\triangle-test.js" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +154,7 @@
     <Folder Include="public\examples\" />
     <Folder Include="public\css\" />
     <Folder Include="public\examples\songs\" />
+    <Folder Include="public\test\" />
     <Folder Include="public\resources\" />
     <Folder Include="public\resources\audio\" />
   </ItemGroup>

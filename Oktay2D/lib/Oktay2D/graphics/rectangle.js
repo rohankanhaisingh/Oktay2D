@@ -90,10 +90,12 @@ export class Rectangle extends RenderObject {
             
         // Background color
         if (this.style.backgroundColor instanceof Color) ctx.fillStyle = typeof this.style.backgroundColor.hex !== null ? this.style.backgroundColor.hex : "transparent";
+        else if (this.style.backgroundColor instanceof CanvasGradient) ctx.fillStyle = this.style.backgroundColor;
         else ctx.fillStyle = typeof this.style.backgroundColor === "string" ? this.style.backgroundColor : "transparent";
 
         // Border color
         if (this.style.borderColor instanceof Color) ctx.strokeStyle = typeof this.style.borderColor.hex !== null ? this.style.borderColor.hex : "transparent";
+        else if (this.style.borderColor instanceof CanvasGradient) ctx.strokeStyle = this.style.borderColor;
         else ctx.strokeStyle = typeof this.style.borderColor === "string" ? this.style.borderColor : "transparent";
 
         // Border width

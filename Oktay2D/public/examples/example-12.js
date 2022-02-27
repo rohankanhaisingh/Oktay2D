@@ -1,5 +1,5 @@
 /**
- * Example 12: Post processing
+ * Example 12: SVG Filters
  * 
  * 
  */
@@ -20,10 +20,10 @@ Oktay2D.RenderObject.AddToGlobalArray = false;
 const renderer = new Oktay2D.Renderer(scene), // Create a new renderer.
 	updater = new Oktay2D.SceneUpdater(renderer);
 
-scene.canvas.style.filter = "url(#turbulence)";
+// scene.canvas.style.filter = "url(#turbulence)";
 
 
-for (var i = 0; i < 22; i++) {
+for (var i = 0; i < 2; i++) {
 
 	const x = Oktay2D.Math.RandomBetween(0, scene.width),
 		y = Oktay2D.Math.RandomBetween(0, scene.height),
@@ -41,9 +41,20 @@ for (var i = 0; i < 22; i++) {
 }
 
 
+const text = new Oktay2D.TextNode("what the dog doing?!".toUpperCase(), 100, 100, {
+	font: "60px Montserrat",
+	filter: "url(#turbulence)",
+	textColor: "#000",
+	shadowBlur: 40,
+	shadowColor: Oktay2D.Color.Random("rgb")
+});
+
+renderer.Add(text);
+
+
 scene.On("mouseDown", function () {
 
-	Oktay2D.AnimateSingleInteger(0, 10, 1000, "easeOutElastic", function (deviation) {
+	Oktay2D.AnimateSingleInteger(0, 5, 1000, "easeOutElastic", function (deviation) {
 
 		const filterElement = document.querySelector("#turbulence feTurbulence");
 

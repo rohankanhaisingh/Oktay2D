@@ -22,6 +22,8 @@ export class TextNode extends RenderObject {
      * @param style.shadowOffsetY {number}
      * @param style.strokeColor {string}
      * @param style.strokeWidth {number}
+     * @param style.filter {string}
+     * @param style.globalCompositeOperation {"source-over" | "source-in" | "source-out" | "source-atop" | "destination-over" | "destination-in" | "destination-out" | "destination-atop" | "lighter"| "copy" | "xor" | "multiply" | "screen" | "overlay" | "darken" | "lighten" | "color-dodge" | "color-burn" | "hard-light" | "soft-light" | "difference" | "exclusion" | "hue" | "saturation" | "color" | "luminosity"}
      */
     constructor(text, x, y, style) {
         super();
@@ -69,6 +71,8 @@ export class TextNode extends RenderObject {
 
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
+        ctx.globalCompositeOperation = typeof this.style.globalCompositeOperation === "string" ? this.style.globalCompositeOperation : null;
+        if (typeof this.style.filter === "string") ctx.filter = this.style.filter
 
         if (this.style.shadowColor instanceof Color) ctx.shadowColor = typeof this.style.shadowColor.hex !== null ? this.style.shadowColor.hex : "transparent";
         else ctx.shadowColor = typeof this.style.shadowColor === "string" ? this.style.shadowColor : false;

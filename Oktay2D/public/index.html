@@ -113,7 +113,7 @@
     <!-- SVG filters-->
     <svg xmlns="http://www.w3.org/2000/svg" class="svg-filter filter-01" width="10" height="10">
         <filter id="turbulence">
-            <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
+            <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="turbulence"></feTurbulence>
             <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G" />
         </filter>
         <filter id="brightness_threshold">
@@ -194,6 +194,6 @@
     <!-- Unused SAT.js library. Already been imported in the library -->
     <!--<script src="../lib/Oktay2D/libs/sat-js-0.9.0/SAT.js"></script>-->
     <!-- Change the source path to see different examples. See directory 'public/examples' for all the available examples.-->
-    <script type="module" src="examples/example-12.js" defer></script>
+    <script type="module" src="test/triangle-test.js" defer></script>
 </body>
 </html>
