@@ -19,8 +19,6 @@ const renderer = new Oktay2D.Renderer(scene, { willReadFrequently: true }),
 	camera = new Oktay2D.Camera(renderer, scene),
 	squares = [];
 
-renderer.SetGlobalTranformation(1, 0, 1, 1, 0, 0);
-
 /**@type {Oktay2D.ColorNode} */
 let backgroundColorNode;
 

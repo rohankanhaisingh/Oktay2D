@@ -1,29 +1,18 @@
-ref Scene : new CanvasScene with (500, 500, document.body);
+#using FLAG : "new-canvas-2d-api";
+#using FLAG : "hardware-acceleration";
+#using MODULE : "SAT";
+#using MODULE : "ELECTRON";
 
-call Scene.SetSize with (window.innerWidth, innerHeight);
+#namespace test<args[]> {
 
-call Scene.SetAttribute with "fitToScreen";
-call Scene.SetAttribute with "disableContextMenu";
+	ref Scene : new CanvasScene with ($FULLWIDTH, $FULLHEIGHT, $BODY);
 
-set $.RenderObject.AddToGlobalArray to false;
+	set attribute "fitToScreen" in Scene;
+	set attribute "disableContextMenu" in Scene;
 
-ref SceneRenderer : new Renderer with Scene;
-ref SceneUpdater : new Updater with SceneRenderer;
+	ref SceneRenderer : new Renderer with Scene;
 
-
-ref createStar : function {
-
-	ref start : call $.Date.Now;
-
-	ref sprites : call await $.CutEntireImageToSprites with ($(".spritesheet-star"), 27, 27);
-
-}
-
-
-event SceneUpdater:OnUpdate with (deltaTime) {
+	ref Triangle : new IsoscelesTriangle with (Scene.width / 2, Scene.height / 2, 20, 510) {
 	
-	call SceneRenderer.ClearScene;
-
+	}
 }
-
-call SceneUpdater.Update;

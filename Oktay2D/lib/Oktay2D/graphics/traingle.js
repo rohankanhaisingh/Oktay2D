@@ -68,6 +68,8 @@ export class IsoscelesTriangle extends RenderObject {
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
         if (this.transformation !== null) ctx.transform(this.transformation.horizontalScaling, this.transformation.verticalSkewing, this.transformation.horizontalSkewing, this.transformation.verticalScaling, this.transformation.horizontalTranslation, this.transformation.verticalTranslation,);
 
+        ctx.translate(-this.x, -this.y)
+
         if (typeof this.style.filter === "string") ctx.filter = this.style.filter;
         if (typeof this.style.filter !== "undefined" && this.style.filter instanceof SVGFilter) ctx.filter = `url(#${this.style.filter.filterId})`;
 
@@ -101,10 +103,10 @@ export class IsoscelesTriangle extends RenderObject {
         // Shadow color.
         ctx.shadowColor = typeof this.style.shadowColor === "string" ? (this.style.shadowColor === "auto" ? this.style.backgroundColor || this.style.borderColor : this.style.shadowColor) : null;
 
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0 - this.size, 0 + this.size + this.isoscelesLength);
-        ctx.lineTo(0 + this.size, 0 + this.size + this.isoscelesLength);
-        ctx.lineTo(0, 0);
+        ctx.moveTo(this.x, this.y - (this.size * 2));
+        ctx.lineTo(this.x - this.size, this.y + this.isoscelesLength);
+        ctx.lineTo(this.x + this.size, this.y + this.isoscelesLength);
+        ctx.lineTo(this.x, this.y - (this.size * 2));
 
         ctx.fill();
         ctx.stroke();

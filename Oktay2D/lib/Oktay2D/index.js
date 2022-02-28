@@ -3,7 +3,7 @@
  *  
  *  A graphics library for the web made by Babah Gee.
  * 
- *  Version 1.0.0 - Last edited: 10-02-2022
+ *  Version 1.0.0 - Last edited: 27-02-2022
  */
 
 import { log } from "./essentials/debugger.js";
@@ -48,7 +48,7 @@ export const _LIB_OPTIONS = {
     }
 }
 
-// Type definitions 
+// ================ Type definitions ================
 /**
 * @typedef CanvasSceneMouseButtons
 * @property {boolean} right
@@ -66,12 +66,13 @@ export const _LIB_OPTIONS = {
 * @property {boolean} isInWindow
 * @property {CanvasSceneMouseButtons} buttons
 */
-
 /**
  * @typedef LinearGradientColorStopDefinitions
  * @property {number} offset
  * @property {string} color
  */
+
+// ================ Public classes ================
 
 export class CanvasScene {
 
@@ -108,7 +109,18 @@ export class CanvasScene {
                 middle: false,
                 right: false,
             },
-            isInWindow: false
+            isInWindow: false,
+            checkSquareCollision(x, y, range) {
+
+                if (x >= this.x - range && x <= this.x + range && y >= this.y - range && y <= this.y + range) {
+
+                    return true;
+
+                }
+
+                return false;
+
+            }
         }
 
         log("CanvasScene", "Initializing canvas scene...", "color: yellow");
@@ -887,6 +899,9 @@ export class SceneUpdater {
     }
 }
 
+
+// ================ Public methods ================
+
 /**
  * Waits for a specific time to continue executing code in a codeblock.
  * @param {number} milliseconds
@@ -932,6 +947,15 @@ export function SetFlag(flagName) {
             break;
     }
 }
+
+
+// ================ Extensions ================
+
+// Array extension
+Array.prototype.getRandomElement = function () { return this[Math.floor(Math.random() * this.length)] };
+
+
+// ================ Exports ================
 
 // Exporting rendering things.
 export { Camera } from "./rendering/camera.js";
