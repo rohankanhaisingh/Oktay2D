@@ -41,6 +41,8 @@ export class Circle extends RenderObject {
         this.endAngle = endAngle;
         this.style = {...style};
 
+        this.width = radius;
+        this.height = radius;
     }
     /**
      * Draw method.
@@ -161,5 +163,18 @@ export class Circle extends RenderObject {
         this.rotation = angle;
 
         return this;
+    }
+
+    /**
+     * Sets the radius of the circe, but also the width and the height.
+     * @param {number} radius
+     */
+    SetRadius(radius) {
+
+        if (typeof angle !== "number") throw new Error("The given argument (as radius) has not been specified as a number.");
+
+        this.radius = radius;
+        this.width = radius;
+        this.height = radius;
     }
 }

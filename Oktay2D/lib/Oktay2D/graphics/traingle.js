@@ -52,6 +52,9 @@ export class IsoscelesTriangle extends RenderObject {
 
         this.style = { ...style };
 
+        this.width = size;
+        this.height = size * isoscelesLength;
+
     }
     /**
      * @param {CanvasRenderingContext2D} ctx

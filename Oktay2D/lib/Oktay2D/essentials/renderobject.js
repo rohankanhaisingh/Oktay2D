@@ -35,11 +35,31 @@ export class RenderObject {
         this.events = {};
 
         this.visible = true;
+        this.forceRendering = false;
 
         ObjectCount += 1;
 
         if (RenderObject.AddToGlobalArray) RenderObjects.push(this);
     }
+
+    /**
+     * Centers render object to specific coordinate based on width and height.
+     * @param {number} x
+     * @param {number} y
+     */
+    Center(x, y) {
+
+        if (typeof this.x === "number" && typeof this.y === "number") {
+
+            this.x = x - (this.width / 2);
+            this.y = y - (this.height / 2);
+
+            return this;
+        }
+
+        return false;
+    }
+
     Destroy() {
 
         let i = 0;

@@ -87,7 +87,7 @@ export class Camera {
         ctx.strokeStyle = "red";
         ctx.lineWidth = 6;
 
-        ctx.strokeRect(0, 0, this.width, this.height);
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
 
 
         ctx.closePath();

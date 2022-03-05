@@ -34,13 +34,30 @@ export class TextNode extends RenderObject {
         this.text = text;
         this.x = x;
         this.y = y;
-        this.style = style;
+        this.style = {...style};
 
-        this.width = 5;
-        this.height = 5;
+        this.width = 1;
+        this.height = 1;
 
         this.rotation = null;
         this.transformation = null;
+
+        this.outlineTextBoundary = false;
+    }
+    CalculateDimension() {
+
+        if (typeof this.style.font !== "string") return null;
+
+        const font = this.style.font,
+            parsedFontSize = parseInt(font.substring(0, font.indexOf(" "))),
+            characterLength = this.text.length,
+            calculatedWidth = characterLength * parsedFontSize,
+            calculatedHeight = parsedFontSize;
+
+        return {
+            width: calculatedWidth,
+            height: calculatedHeight
+        };
     }
     /**
      * Draws content.
@@ -57,18 +74,7 @@ export class TextNode extends RenderObject {
 
         if (typeof this.rotation === "number") ctx.rotate(this.rotation);
 
-        if (this.transformation !== null) {
-
-            ctx.transform(
-                this.transformation.horizontalScaling,
-                this.transformation.verticalSkewing,
-                this.transformation.horizontalSkewing,
-                this.transformation.verticalScaling,
-                this.transformation.horizontalTranslation,
-                this.transformation.verticalTranslation,
-            );
-        }
-
+        if (this.transformation !== null) ctx.transform(this.transformation.horizontalScaling, this.transformation.verticalSkewing, this.transformation.horizontalSkewing, this.transformation.verticalScaling, this.transformation.horizontalTranslation, this.transformation.verticalTranslation);
 
         ctx.globalAlpha = typeof this.style.opacity === "number" ? this.style.opacity : 1;
         ctx.globalCompositeOperation = typeof this.style.globalCompositeOperation === "string" ? this.style.globalCompositeOperation : null;
@@ -93,8 +99,20 @@ export class TextNode extends RenderObject {
         if (this.style.strokeColor instanceof Color) ctx.strokeStyle = typeof this.style.strokeColor.hex !== null ? this.style.strokeColor.hex : "transparent";
         else ctx.strokeStyle = typeof this.style.strokeColor === "string" ? this.style.strokeColor : "black";
 
-        if (typeof this.style.strokeColor !== "undefined") ctx.strokeText(this.text, 0, 0);
-        if (typeof this.style.textColor !== "undefined") ctx.fillText(this.text, 0, 0);
+        if (typeof this.style.strokeColor !== "undefined") ctx.strokeText(this.text, this.width / this.text.length, this.height);
+        if (typeof this.style.textColor !== "undefined") ctx.fillText(this.text, this.width / this.text.length, this.height);
+
+        ctx.closePath();
+
+        if (typeof this.outlineTextBoundary) {
+
+            ctx.beginPath();
+
+            ctx.strokeStyle = "red";
+            ctx.strokeRect(0, 0, this.width, this.height);
+
+            ctx.closePath();
+        }
 
         ctx.restore();
 

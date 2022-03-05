@@ -3,7 +3,7 @@
  *  
  *  A graphics library for the web made by Babah Gee.
  * 
- *  Version 1.0.0 - Last edited: 27-02-2022
+ *  Version 1.2.0 - Last edited: 05-03-2022
  */
 
 import { log } from "./essentials/debugger.js";
@@ -219,7 +219,7 @@ export class CanvasScene {
         // Mouse wheel event.
         this.canvas.addEventListener("wheel", event => {
 
-            if (event.deltaY < 0) this.mouse.wheelDirection = "top";
+            if (event.deltaY < 0) this.mouse.wheelDirection = "up";
             if (event.deltaY > 0) this.mouse.wheelDirection = "down";
             if (event.deltaX < 0) this.mouse.wheelDirection = "left";
             if (event.deltaX > 0) this.mouse.wheelDirection = "right";
@@ -379,7 +379,7 @@ export class Renderer {
     /**@type {Camera} */
     camera;
 
-    /**@type {number} */
+    /**@type {Array<RenderObject>} */
     visibleObjects;
 
     /**
@@ -486,7 +486,7 @@ export class Renderer {
             ctx.scale(this.camera.scaleX, this.camera.scaleY);
 
             let i = 0,
-                visibleObjects = 0;
+                visibleObjects = [];
 
             while (i < this.renderObjects.length) {
 
@@ -497,17 +497,27 @@ export class Renderer {
 
                     if (typeof object.width === "number" && typeof object.height === "number") {
 
-                        if (object.x > -(((this.camera.x + 30) / this.camera.scaleX) + object.width) && object.x < -((this.camera.x - this.camera.width) / this.camera.scaleX) &&
-                            object.y > -((this.camera.y + 30) / this.camera.scaleY) && object.y < -((this.camera.y - (this.camera.height))) / this.camera.scaleY) {
+                        if (!object.forceRendering) {
+                            if (object.x > -(((this.camera.x + 30) / this.camera.scaleX) + object.width) && object.x < -((this.camera.x - this.camera.width) / this.camera.scaleX) &&
+                                object.y > -((this.camera.y + 30) / this.camera.scaleY) && object.y < -((this.camera.y - (this.camera.height))) / this.camera.scaleY) {
 
-                            visibleObjects += 1;
+                                visibleObjects.push(object);
 
-                            object.visible = true;
+                                object.visible = true;
+
+                                if (typeof object.Draw === "function") object.Draw(this.ctx);
+                                if (typeof object.Update === "function") object.Update(this.ctx, deltaTime);
+
+                            } else {
+                                object.visible = false;
+                            }
+                        } else {
 
                             if (typeof object.Draw === "function") object.Draw(this.ctx);
                             if (typeof object.Update === "function") object.Update(this.ctx, deltaTime);
-                             
-                        } else {
+
+                            visibleObjects.push(object);
+
                             object.visible = false;
                         }
 
@@ -861,6 +871,16 @@ export class SceneUpdater {
 
         this.lastTimestamp = now;
 
+
+        if (typeof this.renderer !== "undefined") {
+
+            this.renderer.ClearScene();
+
+            this.renderer.Render(null, this.deltaTime);
+
+        }
+
+
         for (let i = 0; i < this.events.onUpdate.length; i++) {
 
             let updateEvent = this.events.onUpdate[i];
@@ -869,7 +889,6 @@ export class SceneUpdater {
 
         }
 
-        if (typeof this.renderer !== "undefined") this.renderer.Render(null, this.deltaTime);
 
         while (this.times.length > 0 && this.times[0] <= now - 1000) this.times.shift();
 
@@ -960,6 +979,7 @@ Array.prototype.getRandomElement = function () { return this[Math.floor(Math.ran
 // Exporting rendering things.
 export { Camera } from "./rendering/camera.js";
 export { FrameCapturer } from "./rendering/canvasEncoder.js";
+export { PostProcessor } from "./rendering/postProcessor.js";
 
 // Export audio things.
 export { AudioNode } from "./audio/audioNode.js";
@@ -981,6 +1001,7 @@ export { TextNode } from "./graphics/text.js";
 export { ParticleSystem } from "./graphics/particleSystem.js";
 export { Line, QuadraticCurve } from "./graphics/line.js";
 export { IsoscelesTriangle } from "./graphics/traingle.js";
+export { PointLight } from "./graphics/lightning.js";
 
 // Exporting controllers.
 export { PhysicsController } from "./controllers/physicsController.js";
